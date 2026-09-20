@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Painel de Comunicação Interna</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            background: #0f172a;
+            color: #f8fafc;
+            font-family: 'Segoe UI', sans-serif;
+            height: 100vh;
+            overflow: hidden;
+        }
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            grid-template-rows: 1fr 1fr;
+            gap: 20px;
+            padding: 20px;
+            height: 100vh;
+        }
+        .panel {
+            background: #1e293b;
+            border-radius: 16px;
+            border: 3px solid #334155;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            position: relative;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+        }
+        .panel-1 { border-color: #3b82f6; grid-row: 1; grid-column: 1; }
+        .panel-2 { border-color: #10b981; grid-row: 2; grid-column: 1; }
+        .panel-3 { border-color: #f59e0b; grid-row: 1 / 3; grid-column: 2; }
+        .panel h2 {
+            font-size: 1.3rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: #94a3b8;
+            position: absolute;
+            top: 20px;
+            left: 25px;
+        }
+        .data-content {
+            font-size: 5rem;
+            font-weight: 900;
+            text-align: center;
+            text-shadow: 0 0 20px rgba(255,255,255,0.1);
+        }
+        .data-subtext {
+            font-size: 1.2rem;
+            color: #cbd5e1;
+            margin-top: 10px;
+            text-align: center;
+        }
+        .panel-3 .data-content {
+            font-size: 2rem;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            width: 100%;
+        }
+        .info-block {
+            background: rgba(255,255,255,0.05);
+            padding: 15px 30px;
+            border-radius: 10px;
+            border-left: 6px solid #f59e0b;
+            width: 100%;
+        }
+        .info-block .label {
+            font-size: 1rem;
+            color: #94a3b8;
+            margin-bottom: 5px;
+            display: block;
+        }
+        .info-block .value {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #fff;
+            display: block;
+        }
+        @keyframes flash {
+            0% { opacity: 0.5; transform: scale(0.98); }
+            100% { opacity: 1; transform: scale(1); }
+        }
+        .updating { animation: flash 0.5s ease-out; }
+        @media (max-width: 768px) {
+            .dashboard-grid {
+                grid-template-columns: 1fr;
+                grid-template-rows: repeat(3, 1fr);
+            }
+            .panel-1, .panel-2, .panel-3 {
+                grid-row: auto;
+                grid-column: 1;
+            }
+            .data-content { font-size: 3rem; }
+            .info-block .value { font-size: 1.5rem; }
+        }
+    </style>
+</head>
+<body>
+    <div class="dashboard-grid">
+        <div class="panel panel-1">
+            <h2 id="p1-titulo">Painel 1</h2>
+            <div class="data-content" id="p1-valor">---</div>
+            <div class="data-subtext" id="p1-detalhe">Carregando...</div>
+        </div>
+        <div class="panel panel-2">
+            <h2 id="p2-titulo">Painel 2</h2>
+            <div class="data-content" id="p2-valor">---</div>
+            <div class="data-subtext" id="p2-detalhe">Carregando...</div>
+        </div>
+        <div class="panel panel-3">
+            <h2>Comunicação Interna</h2>
+            <div class="data-content">
+                <div class="info-block">
+                    <span class="label">Meta do Turno</span>
+                    <span class="value" id="p3-meta">---</span>
+                </div>
+                <div class="info-block">
+                    <span class="label">Próxima Manutenção</span>
+                    <span class="value" id="p3-manutencao">---</span>
+                </div>
+                <div class="info-block">
+                    <span class="label">Aviso Geral</span>
+                    <span class="value" id="p3-aviso" style="font-size: 1.3rem;">---</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Caminhos relativos — funcionam direto no GitHub Pages
+        const FONTES = {
+            painel1: './dados/painel1.json',
+            painel2: './dados/painel2.json',
+            painel3: './dados/painel3.json'
+        };
+
+        async function buscar(url) {
+            try {
+                const r = await fetch(url + '?v=' + Date.now()); // cache-bust
+                if (!r.ok) throw new Error('Falha ao carregar ' + url);
+                return await r.json();
+            } catch (e) {
+                console.error(e);
+                return null;
+            }
+        }
+
+        async function atualizarPainel1() {
+            const d = await buscar(FONTES.painel1);
+            if (!d) return;
+            document.getElementById('p1-titulo').textContent = d.titulo || 'Painel 1';
+            document.getElementById('p1-valor').textContent = d.valor || '---';
+            document.getElementById('p1-detalhe').textContent = d.detalhe || '';
+            document.getElementById('p1-valor').classList.add('updating');
+            setTimeout(() => document.getElementById('p1-valor').classList.remove('updating'), 500);
+        }
+
+        async function atualizarPainel2() {
+            const d = await buscar(FONTES.painel2);
+            if (!d) return;
+            document.getElementById('p2-titulo').textContent = d.titulo || 'Painel 2';
+            document.getElementById('p2-valor').textContent = d.valor || '---';
+            document.getElementById('p2-detalhe').textContent = d.detalhe || '';
+            document.getElementById('p2-valor').classList.add('updating');
+            setTimeout(() => document.getElementById('p2-valor').classList.remove('updating'), 500);
+        }
+
+        async function atualizarPainel3() {
+            const d = await buscar(FONTES.painel3);
+            if (!d) return;
+            document.getElementById('p3-meta').textContent = d.meta || '---';
+            document.getElementById('p3-manutencao').textContent = d.manutencao || '---';
+            document.getElementById('p3-aviso').textContent = d.aviso || '---';
+        }
+
+        function atualizarTudo() {
+            atualizarPainel1();
+            atualizarPainel2();
+            atualizarPainel3();
+        }
+
+        atualizarTudo();
+        setInterval(atualizarTudo, 30000); // atualiza a cada 30s
+    </script>
+</body>
+</html>
