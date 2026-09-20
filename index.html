@@ -4,55 +4,69 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Painel de Projetos & Core Tools</title>
-    <!-- Chart.js para o gráfico de rosca -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"></script>
-    <!-- Biblioteca de QR Code -->
     <script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js"></script>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
 
         body {
-            background: #0a0f1c;
-            color: #f8fafc;
             font-family: 'Segoe UI', Tahoma, sans-serif;
+            color: #0f172a;
             height: 100vh;
             overflow: hidden;
+            /* 🌈 Fundo colorido com gradiente suave e bolhas de luz */
+            background:
+                radial-gradient(circle at 10% 20%, rgba(96, 165, 250, 0.35) 0%, transparent 45%),
+                radial-gradient(circle at 90% 10%, rgba(167, 139, 250, 0.35) 0%, transparent 45%),
+                radial-gradient(circle at 80% 90%, rgba(52, 211, 153, 0.3) 0%, transparent 45%),
+                radial-gradient(circle at 20% 85%, rgba(251, 191, 36, 0.25) 0%, transparent 45%),
+                linear-gradient(135deg, #eef2ff 0%, #f0f9ff 50%, #ecfdf5 100%);
+            background-attachment: fixed;
         }
 
         /* ===== HEADER ===== */
         .header {
-            height: 60px;
+            height: 68px;
             display: flex;
             align-items: center;
             justify-content: space-between;
-            padding: 0 24px;
-            background: #111827;
-            border-bottom: 2px solid #1f2937;
+            padding: 0 28px;
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(12px);
+            border-bottom: 3px solid transparent;
+            border-image: linear-gradient(90deg, #3b82f6, #8b5cf6, #10b981, #f59e0b) 1;
+            box-shadow: 0 4px 20px rgba(15, 23, 42, 0.06);
+            position: relative;
+            z-index: 10;
         }
         .header h1 {
-            font-size: 1.3rem;
-            letter-spacing: 1px;
-            background: linear-gradient(90deg, #3b82f6, #8b5cf6, #10b981);
+            font-size: 1.4rem;
+            letter-spacing: 0.5px;
+            font-weight: 900;
+            background: linear-gradient(90deg, #2563eb 0%, #7c3aed 50%, #059669 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
-            font-weight: 800;
         }
         .header-info {
             display: flex;
-            gap: 24px;
+            gap: 20px;
             align-items: center;
             font-size: 0.9rem;
-            color: #94a3b8;
+            color: #475569;
+            font-weight: 500;
         }
         .header-info .clock {
             font-family: 'Courier New', monospace;
-            font-size: 1.2rem;
-            color: #fff;
-            font-weight: 700;
+            font-size: 1.25rem;
+            color: #1e293b;
+            font-weight: 800;
+            background: rgba(59, 130, 246, 0.1);
+            padding: 4px 12px;
+            border-radius: 8px;
         }
         .status-dot {
             display: inline-block;
-            width: 8px; height: 8px;
+            width: 9px; height: 9px;
             border-radius: 50%;
             background: #10b981;
             margin-right: 6px;
@@ -63,21 +77,21 @@
             50% { box-shadow: 0 0 0 8px rgba(16,185,129,0); }
         }
 
-        /* ===== BOTÃO TELA CHEIA ===== */
         .btn-fullscreen {
-            background: rgba(59,130,246,0.15);
-            color: #60a5fa;
-            border: 1px solid rgba(59,130,246,0.3);
-            padding: 6px 14px;
-            border-radius: 8px;
+            background: linear-gradient(135deg, #3b82f6, #6366f1);
+            color: #fff;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 10px;
             font-size: 0.8rem;
-            font-weight: 600;
+            font-weight: 700;
             cursor: pointer;
+            box-shadow: 0 4px 12px rgba(59, 130, 246, 0.35);
             transition: 0.2s;
         }
         .btn-fullscreen:hover {
-            background: rgba(59,130,246,0.25);
-            color: #93c5fd;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(59, 130, 246, 0.5);
         }
 
         /* ===== GRID ===== */
@@ -85,51 +99,109 @@
             display: grid;
             grid-template-columns: 1fr 1fr;
             grid-template-rows: 1fr 1fr;
-            gap: 16px;
-            padding: 16px;
-            height: calc(100vh - 60px);
+            gap: 18px;
+            padding: 18px;
+            height: calc(100vh - 68px);
         }
 
         .panel {
-            background: #111827;
-            border-radius: 14px;
-            border: 2px solid #1f2937;
-            padding: 20px;
+            background: rgba(255, 255, 255, 0.92);
+            backdrop-filter: blur(10px);
+            border-radius: 18px;
+            padding: 22px;
             overflow: hidden;
             position: relative;
             display: flex;
             flex-direction: column;
+            box-shadow: 0 8px 30px rgba(15, 23, 42, 0.08);
+            border: 2px solid rgba(255, 255, 255, 0.9);
+            transition: 0.3s;
         }
-        .panel-1 { border-top: 4px solid #3b82f6; grid-row: 1; grid-column: 1; }
-        .panel-2 { border-top: 4px solid #10b981; grid-row: 2; grid-column: 1; }
-        .panel-3 { border-top: 4px solid #f59e0b; grid-row: 1 / 3; grid-column: 2; }
+        .panel:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 40px rgba(15, 23, 42, 0.12);
+        }
+
+        /* Faixas coloridas no topo de cada painel */
+        .panel-1 {
+            grid-row: 1; grid-column: 1;
+            background: linear-gradient(180deg, #eff6ff 0%, #ffffff 12%);
+        }
+        .panel-1::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0;
+            height: 5px;
+            background: linear-gradient(90deg, #3b82f6, #60a5fa);
+            border-radius: 18px 18px 0 0;
+        }
+
+        .panel-2 {
+            grid-row: 2; grid-column: 1;
+            background: linear-gradient(180deg, #ecfdf5 0%, #ffffff 12%);
+        }
+        .panel-2::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0;
+            height: 5px;
+            background: linear-gradient(90deg, #10b981, #34d399);
+            border-radius: 18px 18px 0 0;
+        }
+
+        .panel-3 {
+            grid-row: 1 / 3; grid-column: 2;
+            background: linear-gradient(180deg, #fffbeb 0%, #ffffff 8%);
+        }
+        .panel-3::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0;
+            height: 5px;
+            background: linear-gradient(90deg, #f59e0b, #fbbf24);
+            border-radius: 18px 18px 0 0;
+        }
 
         .panel-title {
             font-size: 0.85rem;
             text-transform: uppercase;
             letter-spacing: 2px;
-            color: #94a3b8;
+            color: #475569;
             margin-bottom: 14px;
             display: flex;
             align-items: center;
             justify-content: space-between;
             flex-shrink: 0;
+            font-weight: 800;
         }
-        .panel-title i { color: #3b82f6; margin-right: 8px; }
-        .panel-2 .panel-title i { color: #10b981; }
-        .panel-3 .panel-title i { color: #f59e0b; }
+        .panel-title i {
+            font-style: normal;
+            margin-right: 8px;
+            font-size: 1.1rem;
+        }
 
         .badge {
-            background: rgba(59,130,246,0.15);
-            color: #60a5fa;
-            padding: 3px 10px;
+            background: linear-gradient(135deg, #dbeafe, #bfdbfe);
+            color: #1e40af;
+            padding: 4px 12px;
             border-radius: 12px;
-            font-size: 0.7rem;
-            font-weight: 600;
+            font-size: 0.68rem;
+            font-weight: 800;
             letter-spacing: 0.5px;
+            box-shadow: 0 2px 6px rgba(59, 130, 246, 0.2);
+        }
+        .badge-verde {
+            background: linear-gradient(135deg, #d1fae5, #a7f3d0);
+            color: #065f46;
+            box-shadow: 0 2px 6px rgba(16, 185, 129, 0.2);
+        }
+        .badge-laranja {
+            background: linear-gradient(135deg, #fef3c7, #fde68a);
+            color: #92400e;
+            box-shadow: 0 2px 6px rgba(245, 158, 11, 0.2);
         }
 
-        /* ===== PAINEL 1 — LAYOUT DIVIDIDO ===== */
+        /* ===== PAINEL 1 ===== */
         .p1-conteudo {
             display: grid;
             grid-template-columns: 1.4fr 1fr;
@@ -137,11 +209,7 @@
             flex: 1;
             min-height: 0;
         }
-        .projetos-coluna {
-            display: flex;
-            flex-direction: column;
-            min-height: 0;
-        }
+        .projetos-coluna { display: flex; flex-direction: column; min-height: 0; }
         .projetos-lista {
             display: flex;
             flex-direction: column;
@@ -150,48 +218,52 @@
             flex: 1;
             padding-right: 4px;
         }
-        .projetos-lista::-webkit-scrollbar { width: 4px; }
+        .projetos-lista::-webkit-scrollbar { width: 5px; }
         .projetos-lista::-webkit-scrollbar-thumb {
-            background: rgba(255,255,255,0.1);
+            background: rgba(59, 130, 246, 0.3);
             border-radius: 4px;
         }
 
         .projeto-item {
-            background: rgba(255,255,255,0.03);
-            border-left: 4px solid #3b82f6;
-            border-radius: 8px;
-            padding: 9px 12px;
+            background: #ffffff;
+            border-left: 5px solid #3b82f6;
+            border-radius: 10px;
+            padding: 10px 14px;
             transition: 0.2s;
+            box-shadow: 0 2px 8px rgba(15, 23, 42, 0.05);
         }
-        .projeto-item:hover { background: rgba(255,255,255,0.06); }
+        .projeto-item:hover {
+            transform: translateX(3px);
+            box-shadow: 0 4px 12px rgba(59, 130, 246, 0.15);
+        }
         .projeto-linha1 {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 5px;
+            margin-bottom: 6px;
             gap: 8px;
         }
         .projeto-nome {
-            font-size: 0.82rem;
-            font-weight: 600;
-            color: #f1f5f9;
+            font-size: 0.85rem;
+            font-weight: 700;
+            color: #1e293b;
             white-space: nowrap;
             overflow: hidden;
             text-overflow: ellipsis;
         }
         .projeto-status {
             font-size: 0.62rem;
-            padding: 2px 7px;
+            padding: 3px 8px;
             border-radius: 10px;
-            font-weight: 700;
+            font-weight: 800;
             text-transform: uppercase;
             letter-spacing: 0.4px;
             white-space: nowrap;
         }
-        .status-concluido { background: rgba(16,185,129,0.15); color: #34d399; }
-        .status-execucao { background: rgba(59,130,246,0.15); color: #60a5fa; }
-        .status-revisao { background: rgba(245,158,11,0.15); color: #fbbf24; }
-        .status-aguardando { background: rgba(139,92,246,0.15); color: #a78bfa; }
+        .status-concluido { background: #d1fae5; color: #065f46; }
+        .status-execucao { background: #dbeafe; color: #1e40af; }
+        .status-revisao { background: #fef3c7; color: #92400e; }
+        .status-aguardando { background: #ede9fe; color: #5b21b6; }
 
         .projeto-progresso {
             display: flex;
@@ -200,8 +272,8 @@
         }
         .barra-bg {
             flex: 1;
-            height: 5px;
-            background: rgba(255,255,255,0.08);
+            height: 6px;
+            background: #f1f5f9;
             border-radius: 4px;
             overflow: hidden;
         }
@@ -211,42 +283,30 @@
             transition: width 0.8s ease;
         }
         .projeto-pct {
-            font-size: 0.7rem;
-            font-weight: 700;
-            color: #cbd5e1;
-            min-width: 34px;
+            font-size: 0.72rem;
+            font-weight: 800;
+            color: #334155;
+            min-width: 36px;
             text-align: right;
             font-family: 'Courier New', monospace;
         }
 
-        /* Coluna do gráfico de rosca */
-        .grafico-coluna {
-            display: flex;
-            flex-direction: column;
-            min-height: 0;
-        }
-        .grafico-wrapper {
-            flex: 1;
-            position: relative;
-            min-height: 0;
-        }
-        .grafico-wrapper canvas {
-            width: 100% !important;
-            height: 100% !important;
-        }
+        .grafico-coluna { display: flex; flex-direction: column; min-height: 0; }
+        .grafico-wrapper { flex: 1; position: relative; min-height: 0; }
+        .grafico-wrapper canvas { width: 100% !important; height: 100% !important; }
 
         .resumo-footer {
             display: flex;
             justify-content: space-around;
-            padding-top: 10px;
-            border-top: 1px solid #1f2937;
-            margin-top: 10px;
+            padding-top: 12px;
+            border-top: 2px dashed #e2e8f0;
+            margin-top: 12px;
             flex-shrink: 0;
         }
         .resumo-item { text-align: center; }
         .resumo-item .valor {
-            font-size: 1.3rem;
-            font-weight: 800;
+            font-size: 1.35rem;
+            font-weight: 900;
             font-family: 'Courier New', monospace;
         }
         .resumo-item .label {
@@ -255,86 +315,101 @@
             text-transform: uppercase;
             letter-spacing: 1px;
             margin-top: 2px;
+            font-weight: 700;
         }
-        .resumo-total .valor { color: #60a5fa; }
-        .resumo-concluido .valor { color: #34d399; }
-        .resumo-andamento .valor { color: #fbbf24; }
-        .resumo-atrasado .valor { color: #f87171; }
+        .resumo-total .valor { color: #2563eb; }
+        .resumo-concluido .valor { color: #059669; }
+        .resumo-andamento .valor { color: #d97706; }
+        .resumo-atrasado .valor { color: #dc2626; }
 
-        /* ===== PAINEL 2 — CORE TOOLS ===== */
+        /* ===== PAINEL 2 ===== */
         .tools-grid {
             display: grid;
             grid-template-columns: repeat(5, 1fr);
-            gap: 10px;
+            gap: 12px;
             flex: 1;
             align-content: center;
         }
         .tool-card {
-            background: rgba(255,255,255,0.03);
-            border: 1px solid #1f2937;
-            border-radius: 10px;
-            padding: 12px 8px;
+            background: #ffffff;
+            border: 2px solid #f1f5f9;
+            border-radius: 14px;
+            padding: 14px 8px;
             display: flex;
             flex-direction: column;
             align-items: center;
             text-align: center;
             gap: 6px;
-            transition: 0.2s;
+            transition: 0.25s;
             cursor: pointer;
+            box-shadow: 0 2px 8px rgba(15, 23, 42, 0.04);
         }
         .tool-card:hover {
-            background: rgba(16,185,129,0.08);
-            transform: translateY(-3px);
+            transform: translateY(-4px);
             border-color: #10b981;
+            box-shadow: 0 8px 20px rgba(16, 185, 129, 0.2);
+            background: linear-gradient(180deg, #ffffff, #ecfdf5);
         }
-        .tool-icone { font-size: 1.6rem; line-height: 1; }
+        .tool-icone {
+            font-size: 1.7rem;
+            line-height: 1;
+        }
         .tool-sigla {
             font-size: 0.85rem;
-            font-weight: 800;
+            font-weight: 900;
             letter-spacing: 1px;
-            color: #f1f5f9;
+            color: #065f46;
         }
         .tool-nome {
             font-size: 0.6rem;
             color: #64748b;
             line-height: 1.2;
             min-height: 24px;
+            font-weight: 500;
         }
         .tool-status-bolinha {
-            width: 10px; height: 10px;
+            width: 12px; height: 12px;
             border-radius: 50%;
             margin-top: 2px;
+            position: relative;
         }
-        .status-verde { background: #10b981; box-shadow: 0 0 8px #10b981; }
-        .status-amarelo { background: #f59e0b; box-shadow: 0 0 8px #f59e0b; }
-        .status-vermelho { background: #ef4444; box-shadow: 0 0 8px #ef4444; }
+        .status-verde {
+            background: #10b981;
+            box-shadow: 0 0 0 4px rgba(16, 185, 129, 0.2);
+        }
+        .status-amarelo {
+            background: #f59e0b;
+            box-shadow: 0 0 0 4px rgba(245, 158, 11, 0.2);
+        }
+        .status-vermelho {
+            background: #ef4444;
+            box-shadow: 0 0 0 4px rgba(239, 68, 68, 0.2);
+        }
         .tool-nivel {
-            font-size: 0.7rem;
-            font-weight: 700;
-            color: #cbd5e1;
+            font-size: 0.75rem;
+            font-weight: 900;
+            color: #334155;
             font-family: 'Courier New', monospace;
+            margin-top: 2px;
         }
 
-        /* ===== PAINEL 3 — VÍDEOS ===== */
+        /* ===== PAINEL 3 ===== */
         .video-container {
             flex: 1;
-            border-radius: 12px;
+            border-radius: 14px;
             overflow: hidden;
             background: #000;
             position: relative;
             display: flex;
             flex-direction: column;
+            box-shadow: 0 6px 20px rgba(245, 158, 11, 0.2);
+            border: 2px solid #fef3c7;
         }
-        .video-frame {
-            width: 100%;
-            flex: 1;
-            border: none;
-            background: #000;
-        }
+        .video-frame { width: 100%; flex: 1; border: none; background: #000; }
         .video-info {
-            padding: 12px 16px;
-            background: #0f172a;
-            border-top: 2px solid #f59e0b;
+            padding: 14px 18px;
+            background: linear-gradient(135deg, #fffbeb, #fef3c7);
+            border-top: 3px solid #f59e0b;
             display: flex;
             justify-content: space-between;
             align-items: center;
@@ -342,66 +417,71 @@
         }
         .video-meta h3 {
             font-size: 1rem;
-            color: #f8fafc;
-            font-weight: 700;
+            color: #78350f;
+            font-weight: 800;
             margin-bottom: 3px;
         }
         .video-meta p {
             font-size: 0.75rem;
-            color: #94a3b8;
+            color: #92400e;
+            font-weight: 500;
         }
         .video-duracao {
-            background: rgba(245,158,11,0.15);
-            color: #fbbf24;
-            padding: 4px 10px;
+            background: linear-gradient(135deg, #f59e0b, #fbbf24);
+            color: #fff;
+            padding: 5px 12px;
             border-radius: 8px;
             font-size: 0.75rem;
-            font-weight: 700;
+            font-weight: 800;
             font-family: 'Courier New', monospace;
             white-space: nowrap;
+            box-shadow: 0 3px 8px rgba(245, 158, 11, 0.3);
         }
 
         .playlist-nav {
             display: flex;
-            gap: 6px;
-            padding: 10px 16px;
-            background: #0f172a;
-            border-top: 1px solid #1f2937;
+            gap: 8px;
+            padding: 12px 16px;
+            background: #fffbeb;
+            border-top: 1px solid #fef3c7;
             justify-content: center;
             flex-wrap: wrap;
         }
         .playlist-dot {
-            width: 26px; height: 26px;
+            width: 30px; height: 30px;
             border-radius: 50%;
-            background: rgba(255,255,255,0.08);
-            border: 2px solid transparent;
+            background: #ffffff;
+            border: 2px solid #fde68a;
             cursor: pointer;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 0.7rem;
-            font-weight: 700;
-            color: #94a3b8;
+            font-size: 0.75rem;
+            font-weight: 800;
+            color: #92400e;
             transition: 0.2s;
+            box-shadow: 0 2px 6px rgba(245, 158, 11, 0.15);
         }
         .playlist-dot:hover {
-            background: rgba(245,158,11,0.2);
-            color: #fbbf24;
+            background: #fef3c7;
+            transform: scale(1.05);
         }
         .playlist-dot.active {
-            background: #f59e0b;
-            color: #0a0f1c;
-            border-color: #fbbf24;
+            background: linear-gradient(135deg, #f59e0b, #fbbf24);
+            color: #fff;
+            border-color: #f59e0b;
             transform: scale(1.15);
+            box-shadow: 0 4px 12px rgba(245, 158, 11, 0.5);
         }
         .playlist-dot.done {
-            background: rgba(16,185,129,0.3);
-            color: #34d399;
+            background: #d1fae5;
+            color: #059669;
+            border-color: #10b981;
         }
 
         .progresso-video {
-            height: 3px;
-            background: #1f2937;
+            height: 4px;
+            background: #fef3c7;
             position: relative;
             overflow: hidden;
         }
@@ -412,33 +492,38 @@
             transition: width 1s linear;
         }
 
-        /* ===== QR CODE FLUTUANTE ===== */
+        /* ===== QR CODE ===== */
         .qr-flutuante {
             position: fixed;
             bottom: 20px;
             right: 20px;
-            background: #fff;
-            padding: 10px;
-            border-radius: 12px;
-            box-shadow: 0 8px 30px rgba(0,0,0,0.5);
+            background: linear-gradient(135deg, #ffffff, #f8fafc);
+            padding: 12px;
+            border-radius: 16px;
+            box-shadow: 0 10px 40px rgba(59, 130, 246, 0.3);
             z-index: 999;
             display: flex;
             flex-direction: column;
             align-items: center;
-            gap: 6px;
+            gap: 8px;
             transition: 0.3s;
             cursor: pointer;
+            border: 2px solid #dbeafe;
         }
         .qr-flutuante:hover {
-            transform: scale(1.05);
-            box-shadow: 0 10px 40px rgba(59,130,246,0.5);
+            transform: scale(1.05) rotate(-2deg);
+            box-shadow: 0 15px 50px rgba(59, 130, 246, 0.5);
+            border-color: #3b82f6;
         }
         .qr-flutuante #qrcode {
-            width: 100px;
-            height: 100px;
+            width: 105px;
+            height: 105px;
             display: flex;
             align-items: center;
             justify-content: center;
+            padding: 4px;
+            background: #fff;
+            border-radius: 8px;
         }
         .qr-flutuante #qrcode img,
         .qr-flutuante #qrcode canvas {
@@ -447,37 +532,42 @@
         }
         .qr-label {
             font-size: 0.65rem;
-            font-weight: 700;
-            color: #0a0f1c;
+            font-weight: 800;
+            background: linear-gradient(90deg, #3b82f6, #8b5cf6);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
             text-align: center;
             letter-spacing: 0.5px;
         }
         .qr-minimizar {
             position: absolute;
-            top: -8px;
-            right: -8px;
-            background: #ef4444;
+            top: -10px;
+            right: -10px;
+            background: linear-gradient(135deg, #ef4444, #dc2626);
             color: #fff;
-            border: none;
-            width: 22px;
-            height: 22px;
+            border: 2px solid #fff;
+            width: 26px;
+            height: 26px;
             border-radius: 50%;
             cursor: pointer;
-            font-size: 12px;
+            font-size: 14px;
+            font-weight: 800;
             line-height: 1;
             display: flex;
             align-items: center;
             justify-content: center;
+            box-shadow: 0 3px 10px rgba(239, 68, 68, 0.4);
         }
         .qr-flutuante.minimizado {
-            padding: 8px;
+            padding: 10px 14px;
+            border-radius: 24px;
         }
-        .qr-flutuante.minimizado #qrcode {
-            display: none;
-        }
+        .qr-flutuante.minimizado #qrcode { display: none; }
         .qr-flutuante.minimizado .qr-label {
-            font-size: 0.75rem;
+            font-size: 0.8rem;
             color: #3b82f6;
+            background: none;
+            -webkit-text-fill-color: #3b82f6;
         }
 
         /* ===== RESPONSIVO ===== */
@@ -499,10 +589,11 @@
             .grafico-coluna { min-height: 180px; }
         }
         @media (max-width: 500px) {
-            .header { flex-direction: column; height: auto; padding: 10px; gap: 8px; }
+            .header { flex-direction: column; height: auto; padding: 12px; gap: 10px; }
+            .header-info { flex-wrap: wrap; justify-content: center; }
             .tools-grid { grid-template-columns: repeat(2, 1fr); }
             .qr-flutuante { bottom: 10px; right: 10px; }
-            .qr-flutuante #qrcode { width: 70px; height: 70px; }
+            .qr-flutuante #qrcode { width: 75px; height: 75px; }
         }
     </style>
 </head>
@@ -515,29 +606,25 @@
             <span><span class="status-dot"></span>Sistema Online</span>
             <span id="dataAtual">--/--/----</span>
             <span class="clock" id="relogio">00:00:00</span>
-            <button class="btn-fullscreen" id="btnFullscreen">
-                ⛶ Tela Cheia
-            </button>
+            <button class="btn-fullscreen" id="btnFullscreen">⛶ Tela Cheia</button>
         </div>
     </div>
 
     <!-- ===== GRID ===== -->
     <div class="dashboard-grid">
 
-        <!-- PAINEL 1 — PROJETOS + GRÁFICO -->
+        <!-- PAINEL 1 -->
         <div class="panel panel-1">
             <div class="panel-title">
                 <span><i>📁</i>Projetos em Andamento</span>
                 <span class="badge" id="p1-badge">--</span>
             </div>
             <div class="p1-conteudo">
-                <!-- Coluna lista -->
                 <div class="projetos-coluna">
                     <div class="projetos-lista" id="p1-lista">
                         <div style="color:#64748b; text-align:center; padding:20px;">Carregando...</div>
                     </div>
                 </div>
-                <!-- Coluna gráfico rosca -->
                 <div class="grafico-coluna">
                     <div class="grafico-wrapper">
                         <canvas id="graficoProjetos"></canvas>
@@ -564,32 +651,27 @@
             </div>
         </div>
 
-        <!-- PAINEL 2 — CORE TOOLS -->
+        <!-- PAINEL 2 -->
         <div class="panel panel-2">
             <div class="panel-title">
                 <span><i>🛠️</i>Core Tools — Status</span>
-                <span class="badge" style="background:rgba(16,185,129,0.15); color:#34d399;">Qualidade</span>
+                <span class="badge badge-verde">Qualidade</span>
             </div>
             <div class="tools-grid" id="p2-grid">
                 <div style="color:#64748b; grid-column:1/-1; text-align:center; padding:20px;">Carregando...</div>
             </div>
         </div>
 
-        <!-- PAINEL 3 — VÍDEO -->
+        <!-- PAINEL 3 -->
         <div class="panel panel-3">
             <div class="panel-title">
                 <span><i>🎬</i>Treinamento em Destaque</span>
-                <span class="badge" style="background:rgba(245,158,11,0.15); color:#fbbf24;" id="p3-contador">1 / 1</span>
+                <span class="badge badge-laranja" id="p3-contador">1 / 1</span>
             </div>
             <div class="video-container">
-                <iframe
-                    id="videoFrame"
-                    class="video-frame"
-                    src=""
-                    title="Treinamento"
+                <iframe id="videoFrame" class="video-frame" src="" title="Treinamento"
                     allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                    allowfullscreen>
-                </iframe>
+                    allowfullscreen></iframe>
                 <div class="progresso-video">
                     <div class="progresso-video-fill" id="progressoVideo"></div>
                 </div>
@@ -605,22 +687,20 @@
         </div>
     </div>
 
-    <!-- ===== QR CODE FLUTUANTE ===== -->
-    <div class="qr-flutuante" id="qrFlutuante" title="Aponte a câmera do celular para abrir o painel">
-        <button class="qr-minimizar" id="qrMinimizar" title="Minimizar QR">−</button>
+    <!-- ===== QR CODE ===== -->
+    <div class="qr-flutuante" id="qrFlutuante" title="Aponte a câmera do celular">
+        <button class="qr-minimizar" id="qrMinimizar" title="Minimizar">−</button>
         <div id="qrcode"></div>
         <div class="qr-label">📱 Abrir no celular</div>
     </div>
 
     <script>
-        // ===================== CONFIGURAÇÃO =====================
         const FONTES = {
             painel1: './dados/painel1.json',
             painel2: './dados/painel2.json',
             painel3: './dados/painel3.json'
         };
 
-        // URL padrão do painel (caso o JSON não traga) — será usada no QR Code
         const URL_PADRAO_PAINEL = window.location.href.split('?')[0];
 
         let graficoProjetos = null;
@@ -631,7 +711,6 @@
         let intervaloProgresso = null;
         let segundosDecorridos = 0;
 
-        // ===================== UTILITÁRIOS =====================
         async function buscar(url) {
             try {
                 const r = await fetch(url + '?v=' + Date.now());
@@ -660,7 +739,6 @@
             return 'status-verde';
         }
 
-        // ===================== RELÓGIO =====================
         function atualizarRelogio() {
             const agora = new Date();
             document.getElementById('relogio').textContent = agora.toLocaleTimeString('pt-BR');
@@ -669,16 +747,11 @@
         setInterval(atualizarRelogio, 1000);
         atualizarRelogio();
 
-        // ===================== BOTÃO TELA CHEIA =====================
         document.getElementById('btnFullscreen').addEventListener('click', () => {
-            if (!document.fullscreenElement) {
-                document.documentElement.requestFullscreen();
-            } else {
-                document.exitFullscreen();
-            }
+            if (!document.fullscreenElement) document.documentElement.requestFullscreen();
+            else document.exitFullscreen();
         });
 
-        // ===================== QR CODE =====================
         function gerarQRCode(url) {
             const container = document.getElementById('qrcode');
             container.innerHTML = '';
@@ -686,27 +759,23 @@
                 text: url,
                 width: 120,
                 height: 120,
-                colorDark: '#0a0f1c',
+                colorDark: '#1e293b',
                 colorLight: '#ffffff',
                 correctLevel: QRCode.CorrectLevel.M
             });
         }
 
-        // Minimizar QR Code
         document.getElementById('qrMinimizar').addEventListener('click', (e) => {
             e.stopPropagation();
             const qr = document.getElementById('qrFlutuante');
             qr.classList.toggle('minimizado');
-            const btn = document.getElementById('qrMinimizar');
-            btn.textContent = qr.classList.contains('minimizado') ? '📱' : '−';
+            e.target.textContent = qr.classList.contains('minimizado') ? '📱' : '−';
         });
 
-        // ===================== PAINEL 1 — PROJETOS + GRÁFICO =====================
         async function atualizarPainel1() {
             const dados = await buscar(FONTES.painel1);
             if (!dados) return;
 
-            // Lista de projetos
             const lista = document.getElementById('p1-lista');
             lista.innerHTML = '';
             dados.projetos.forEach(p => {
@@ -728,7 +797,6 @@
                 lista.appendChild(item);
             });
 
-            // Resumo numérico
             const r = dados.resumo || {};
             document.getElementById('p1-total').textContent = r.total || dados.projetos.length;
             document.getElementById('p1-concluidos').textContent = r.concluidos || 0;
@@ -736,21 +804,13 @@
             document.getElementById('p1-atrasados').textContent = r.atrasados || 0;
             document.getElementById('p1-badge').textContent = dados.projetos.length + ' ativos';
 
-            // ===== GRÁFICO DE ROSCA =====
-            const contagem = {
-                'Concluído': 0,
-                'Em execução': 0,
-                'Revisão': 0,
-                'Aguardando': 0,
-                'Atrasado': 0
-            };
+            const contagem = { 'Concluído': 0, 'Em execução': 0, 'Revisão': 0, 'Aguardando': 0 };
             dados.projetos.forEach(p => {
                 const s = (p.status || '').toLowerCase();
                 if (s.includes('conclu')) contagem['Concluído']++;
                 else if (s.includes('execu')) contagem['Em execução']++;
                 else if (s.includes('revis')) contagem['Revisão']++;
                 else if (s.includes('aguard')) contagem['Aguardando']++;
-                else if (s.includes('atras')) contagem['Atrasado']++;
             });
 
             const labels = Object.keys(contagem).filter(k => contagem[k] > 0);
@@ -759,9 +819,7 @@
                 if (l === 'Concluído') return '#10b981';
                 if (l === 'Em execução') return '#3b82f6';
                 if (l === 'Revisão') return '#f59e0b';
-                if (l === 'Aguardando') return '#a78bfa';
-                if (l === 'Atrasado') return '#ef4444';
-                return '#64748b';
+                return '#a78bfa';
             });
 
             const ctx = document.getElementById('graficoProjetos').getContext('2d');
@@ -778,21 +836,21 @@
                         datasets: [{
                             data: valores,
                             backgroundColor: cores,
-                            borderColor: '#111827',
-                            borderWidth: 3,
-                            hoverOffset: 8
+                            borderColor: '#ffffff',
+                            borderWidth: 4,
+                            hoverOffset: 10
                         }]
                     },
                     options: {
                         responsive: true,
                         maintainAspectRatio: false,
-                        cutout: '60%',
+                        cutout: '62%',
                         plugins: {
                             legend: {
                                 position: 'bottom',
                                 labels: {
-                                    color: '#94a3b8',
-                                    font: { size: 10, family: 'Segoe UI' },
+                                    color: '#475569',
+                                    font: { size: 10, weight: '600', family: 'Segoe UI' },
                                     padding: 8,
                                     boxWidth: 10,
                                     boxHeight: 10,
@@ -800,11 +858,7 @@
                                 }
                             },
                             tooltip: {
-                                backgroundColor: '#0f172a',
-                                titleColor: '#fff',
-                                bodyColor: '#e2e8f0',
-                                borderColor: '#3b82f6',
-                                borderWidth: 1,
+                                backgroundColor: '#1e293b',
                                 padding: 10,
                                 callbacks: {
                                     label: (ctx) => {
@@ -819,12 +873,10 @@
                 });
             }
 
-            // ===== QR CODE =====
             const urlParaQR = dados.urlPainel || URL_PADRAO_PAINEL;
             gerarQRCode(urlParaQR);
         }
 
-        // ===================== PAINEL 2 — CORE TOOLS =====================
         async function atualizarPainel2() {
             const dados = await buscar(FONTES.painel2);
             if (!dados) return;
@@ -845,7 +897,6 @@
             });
         }
 
-        // ===================== PAINEL 3 — VÍDEO =====================
         async function carregarPlaylist() {
             const dados = await buscar(FONTES.painel3);
             if (!dados || !dados.videos) return;
@@ -876,8 +927,8 @@
             if (!videosPlaylist.length) return;
             videoAtual = index;
             const v = videosPlaylist[index];
-            const iframe = document.getElementById('videoFrame');
-            iframe.src = `https://www.youtube.com/embed/${v.id}?autoplay=1&mute=1&rel=0&modestbranding=1`;
+            document.getElementById('videoFrame').src =
+                `https://www.youtube.com/embed/${v.id}?autoplay=1&mute=1&rel=0&modestbranding=1`;
             document.getElementById('videoTitulo').textContent = v.titulo;
             document.getElementById('videoDescricao').textContent = v.descricao;
             document.getElementById('videoDuracao').textContent = v.duracao;
@@ -912,7 +963,6 @@
             iniciarCicloVideo();
         }
 
-        // ===================== INICIALIZAÇÃO =====================
         async function atualizarTudo() {
             await Promise.all([atualizarPainel1(), atualizarPainel2()]);
         }
@@ -920,7 +970,7 @@
         carregarPlaylist();
         setInterval(atualizarTudo, 30000);
 
-        console.log('%c🎯 Painel com gráfico de rosca + QR Code', 'color:#3b82f6; font-size:14px; font-weight:bold;');
+        console.log('%c🎨 Painel colorido ativo', 'color:#3b82f6; font-size:14px; font-weight:bold;');
     </script>
 </body>
 </html>
