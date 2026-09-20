@@ -1,5 +1,36 @@
 {
-  "meta": "5.800 un",
-  "manutencao": "18/05 às 06:00",
-  "aviso": "Troca de stencil prevista para o Turno C"
+  "titulo": "Treinamentos - Core Tools",
+  "videos": [
+    {
+      "id": "l9ENuN3iG7Q",
+      "titulo": "Introdução ao APQP",
+      "descricao": "Planejamento Avançado da Qualidade do Produto",
+      "duracao": "8:32"
+    },
+    {
+      "id": "_GVk_hEMj7s",
+      "titulo": "FMEA na Prática",
+      "descricao": "Análise de Modos de Falha e Efeitos",
+      "duracao": "12:15"
+    },
+    {
+      "id": "Nc8GfFZ2-0Y",
+      "titulo": "MSA - Estudo R&R",
+      "descricao": "Análise do Sistema de Medição",
+      "duracao": "10:47"
+    },
+    {
+      "id": "3zQzZ7QmZ-A",
+      "titulo": "SPC - Cartas de Controle",
+      "descricao": "Controle Estatístico do Processo",
+      "duracao": "9:20"
+    },
+    {
+      "id": "W8D2jWpUVCs",
+      "titulo": "PPAP - Submissão de Peças",
+      "descricao": "Processo de Aprovação de Peças de Produção",
+      "duracao": "11:05"
+    }
+  ],
+  "tempoTroca": 30
 }
