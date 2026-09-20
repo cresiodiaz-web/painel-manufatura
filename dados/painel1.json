@@ -1,5 +1,16 @@
 {
-  "titulo": "Produção Hora",
-  "valor": "247",
-  "detalhe": "Unidades por hora"
+  "titulo": "Projetos em Andamento",
+  "projetos": [
+    { "nome": "APQP - Linha SMT-04", "status": "Em execução", "progresso": 68, "cor": "#3b82f6" },
+    { "nome": "PPAP - Cliente Valeo", "status": "Aguardando aprovação", "progresso": 92, "cor": "#10b981" },
+    { "nome": "FMEA - Processo Solda", "status": "Revisão", "progresso": 45, "cor": "#f59e0b" },
+    { "nome": "MSA - Estudo R&R", "status": "Em execução", "progresso": 30, "cor": "#8b5cf6" },
+    { "nome": "SPC - Cartas de Controle", "status": "Concluído", "progresso": 100, "cor": "#10b981" }
+  ],
+  "resumo": {
+    "total": 5,
+    "concluidos": 1,
+    "emAndamento": 4,
+    "atrasados": 0
+  }
 }
