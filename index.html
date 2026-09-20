@@ -3,191 +3,679 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Painel de Comunicação Interna</title>
+    <title>Painel de Projetos & Core Tools</title>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
+
         body {
-            background: #0f172a;
+            background: #0a0f1c;
             color: #f8fafc;
-            font-family: 'Segoe UI', sans-serif;
+            font-family: 'Segoe UI', Tahoma, sans-serif;
             height: 100vh;
             overflow: hidden;
         }
+
+        /* ===== HEADER ===== */
+        .header {
+            height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 24px;
+            background: #111827;
+            border-bottom: 2px solid #1f2937;
+        }
+        .header h1 {
+            font-size: 1.3rem;
+            letter-spacing: 1px;
+            background: linear-gradient(90deg, #3b82f6, #8b5cf6, #10b981);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-weight: 800;
+        }
+        .header-info {
+            display: flex;
+            gap: 24px;
+            align-items: center;
+            font-size: 0.9rem;
+            color: #94a3b8;
+        }
+        .header-info .clock {
+            font-family: 'Courier New', monospace;
+            font-size: 1.2rem;
+            color: #fff;
+            font-weight: 700;
+        }
+        .status-dot {
+            display: inline-block;
+            width: 8px; height: 8px;
+            border-radius: 50%;
+            background: #10b981;
+            margin-right: 6px;
+            animation: pulse 2s infinite;
+        }
+        @keyframes pulse {
+            0%,100% { box-shadow: 0 0 0 0 rgba(16,185,129,0.7); }
+            50% { box-shadow: 0 0 0 8px rgba(16,185,129,0); }
+        }
+
+        /* ===== GRID ===== */
         .dashboard-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
             grid-template-rows: 1fr 1fr;
-            gap: 20px;
-            padding: 20px;
-            height: 100vh;
+            gap: 16px;
+            padding: 16px;
+            height: calc(100vh - 60px);
         }
+
         .panel {
-            background: #1e293b;
-            border-radius: 16px;
-            border: 3px solid #334155;
+            background: #111827;
+            border-radius: 14px;
+            border: 2px solid #1f2937;
+            padding: 20px;
+            overflow: hidden;
+            position: relative;
             display: flex;
             flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            padding: 20px;
-            position: relative;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.3);
         }
-        .panel-1 { border-color: #3b82f6; grid-row: 1; grid-column: 1; }
-        .panel-2 { border-color: #10b981; grid-row: 2; grid-column: 1; }
-        .panel-3 { border-color: #f59e0b; grid-row: 1 / 3; grid-column: 2; }
-        .panel h2 {
-            font-size: 1.3rem;
+        .panel-1 { border-top: 4px solid #3b82f6; grid-row: 1; grid-column: 1; }
+        .panel-2 { border-top: 4px solid #10b981; grid-row: 2; grid-column: 1; }
+        .panel-3 { border-top: 4px solid #f59e0b; grid-row: 1 / 3; grid-column: 2; }
+
+        .panel-title {
+            font-size: 0.85rem;
             text-transform: uppercase;
             letter-spacing: 2px;
             color: #94a3b8;
-            position: absolute;
-            top: 20px;
-            left: 25px;
+            margin-bottom: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-shrink: 0;
         }
-        .data-content {
-            font-size: 5rem;
-            font-weight: 900;
-            text-align: center;
-            text-shadow: 0 0 20px rgba(255,255,255,0.1);
+        .panel-title i { color: #3b82f6; margin-right: 8px; }
+        .panel-2 .panel-title i { color: #10b981; }
+        .panel-3 .panel-title i { color: #f59e0b; }
+
+        .badge {
+            background: rgba(59,130,246,0.15);
+            color: #60a5fa;
+            padding: 3px 10px;
+            border-radius: 12px;
+            font-size: 0.7rem;
+            font-weight: 600;
+            letter-spacing: 0.5px;
         }
-        .data-subtext {
-            font-size: 1.2rem;
-            color: #cbd5e1;
-            margin-top: 10px;
-            text-align: center;
-        }
-        .panel-3 .data-content {
-            font-size: 2rem;
+
+        /* ===== PAINEL 1 — PROJETOS ===== */
+        .projetos-lista {
             display: flex;
             flex-direction: column;
-            gap: 20px;
-            width: 100%;
+            gap: 10px;
+            overflow-y: auto;
+            flex: 1;
         }
-        .info-block {
-            background: rgba(255,255,255,0.05);
-            padding: 15px 30px;
+        .projeto-item {
+            background: rgba(255,255,255,0.03);
+            border-left: 4px solid #3b82f6;
+            border-radius: 8px;
+            padding: 10px 14px;
+            transition: 0.2s;
+        }
+        .projeto-item:hover { background: rgba(255,255,255,0.06); }
+        .projeto-linha1 {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 6px;
+        }
+        .projeto-nome {
+            font-size: 0.92rem;
+            font-weight: 600;
+            color: #f1f5f9;
+        }
+        .projeto-status {
+            font-size: 0.7rem;
+            padding: 3px 8px;
             border-radius: 10px;
-            border-left: 6px solid #f59e0b;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.4px;
+        }
+        .status-concluido { background: rgba(16,185,129,0.15); color: #34d399; }
+        .status-execucao { background: rgba(59,130,246,0.15); color: #60a5fa; }
+        .status-revisao { background: rgba(245,158,11,0.15); color: #fbbf24; }
+        .status-aguardando { background: rgba(139,92,246,0.15); color: #a78bfa; }
+
+        .projeto-progresso {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .barra-bg {
+            flex: 1;
+            height: 6px;
+            background: rgba(255,255,255,0.08);
+            border-radius: 4px;
+            overflow: hidden;
+        }
+        .barra-fill {
+            height: 100%;
+            border-radius: 4px;
+            transition: width 0.8s ease;
+        }
+        .projeto-pct {
+            font-size: 0.8rem;
+            font-weight: 700;
+            color: #cbd5e1;
+            min-width: 40px;
+            text-align: right;
+            font-family: 'Courier New', monospace;
+        }
+
+        .resumo-footer {
+            display: flex;
+            justify-content: space-around;
+            padding-top: 10px;
+            border-top: 1px solid #1f2937;
+            margin-top: 10px;
+            flex-shrink: 0;
+        }
+        .resumo-item {
+            text-align: center;
+        }
+        .resumo-item .valor {
+            font-size: 1.4rem;
+            font-weight: 800;
+            font-family: 'Courier New', monospace;
+        }
+        .resumo-item .label {
+            font-size: 0.65rem;
+            color: #64748b;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-top: 2px;
+        }
+        .resumo-total .valor { color: #60a5fa; }
+        .resumo-concluido .valor { color: #34d399; }
+        .resumo-andamento .valor { color: #fbbf24; }
+        .resumo-atrasado .valor { color: #f87171; }
+
+        /* ===== PAINEL 2 — CORE TOOLS ===== */
+        .tools-grid {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 10px;
+            flex: 1;
+            align-content: center;
+        }
+        .tool-card {
+            background: rgba(255,255,255,0.03);
+            border: 1px solid #1f2937;
+            border-radius: 10px;
+            padding: 12px 8px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            gap: 6px;
+            transition: 0.2s;
+            cursor: pointer;
+        }
+        .tool-card:hover {
+            background: rgba(16,185,129,0.08);
+            transform: translateY(-3px);
+            border-color: #10b981;
+        }
+        .tool-icone {
+            font-size: 1.6rem;
+            line-height: 1;
+        }
+        .tool-sigla {
+            font-size: 0.85rem;
+            font-weight: 800;
+            letter-spacing: 1px;
+            color: #f1f5f9;
+        }
+        .tool-nome {
+            font-size: 0.6rem;
+            color: #64748b;
+            line-height: 1.2;
+            min-height: 24px;
+        }
+        .tool-status-bolinha {
+            width: 10px; height: 10px;
+            border-radius: 50%;
+            margin-top: 2px;
+        }
+        .status-verde { background: #10b981; box-shadow: 0 0 8px #10b981; }
+        .status-amarelo { background: #f59e0b; box-shadow: 0 0 8px #f59e0b; }
+        .status-vermelho { background: #ef4444; box-shadow: 0 0 8px #ef4444; }
+        .tool-nivel {
+            font-size: 0.7rem;
+            font-weight: 700;
+            color: #cbd5e1;
+            font-family: 'Courier New', monospace;
+        }
+
+        /* ===== PAINEL 3 — VÍDEOS ===== */
+        .video-container {
+            flex: 1;
+            border-radius: 12px;
+            overflow: hidden;
+            background: #000;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+        }
+        .video-frame {
             width: 100%;
+            flex: 1;
+            border: none;
+            background: #000;
         }
-        .info-block .label {
+        .video-info {
+            padding: 12px 16px;
+            background: #0f172a;
+            border-top: 2px solid #f59e0b;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 12px;
+        }
+        .video-meta h3 {
             font-size: 1rem;
+            color: #f8fafc;
+            font-weight: 700;
+            margin-bottom: 3px;
+        }
+        .video-meta p {
+            font-size: 0.75rem;
             color: #94a3b8;
-            margin-bottom: 5px;
-            display: block;
         }
-        .info-block .value {
-            font-size: 2rem;
-            font-weight: bold;
-            color: #fff;
-            display: block;
+        .video-duracao {
+            background: rgba(245,158,11,0.15);
+            color: #fbbf24;
+            padding: 4px 10px;
+            border-radius: 8px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            font-family: 'Courier New', monospace;
+            white-space: nowrap;
         }
-        @keyframes flash {
-            0% { opacity: 0.5; transform: scale(0.98); }
-            100% { opacity: 1; transform: scale(1); }
+
+        .playlist-nav {
+            display: flex;
+            gap: 6px;
+            padding: 10px 16px;
+            background: #0f172a;
+            border-top: 1px solid #1f2937;
+            justify-content: center;
+            flex-wrap: wrap;
         }
-        .updating { animation: flash 0.5s ease-out; }
-        @media (max-width: 768px) {
+        .playlist-dot {
+            width: 26px; height: 26px;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.08);
+            border: 2px solid transparent;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.7rem;
+            font-weight: 700;
+            color: #94a3b8;
+            transition: 0.2s;
+        }
+        .playlist-dot:hover {
+            background: rgba(245,158,11,0.2);
+            color: #fbbf24;
+        }
+        .playlist-dot.active {
+            background: #f59e0b;
+            color: #0a0f1c;
+            border-color: #fbbf24;
+            transform: scale(1.15);
+        }
+        .playlist-dot.done {
+            background: rgba(16,185,129,0.3);
+            color: #34d399;
+        }
+
+        .progresso-video {
+            height: 3px;
+            background: #1f2937;
+            position: relative;
+            overflow: hidden;
+        }
+        .progresso-video-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #f59e0b, #fbbf24);
+            width: 0%;
+            transition: width 1s linear;
+        }
+
+        /* ===== RESPONSIVO ===== */
+        @media (max-width: 900px) {
+            body { overflow: auto; height: auto; }
             .dashboard-grid {
                 grid-template-columns: 1fr;
-                grid-template-rows: repeat(3, 1fr);
+                grid-template-rows: auto;
+                height: auto;
             }
             .panel-1, .panel-2, .panel-3 {
                 grid-row: auto;
                 grid-column: 1;
+                min-height: 300px;
             }
-            .data-content { font-size: 3rem; }
-            .info-block .value { font-size: 1.5rem; }
+            .panel-3 { min-height: 420px; }
+            .tools-grid { grid-template-columns: repeat(3, 1fr); }
+        }
+        @media (max-width: 500px) {
+            .header { flex-direction: column; height: auto; padding: 10px; gap: 8px; }
+            .tools-grid { grid-template-columns: repeat(2, 1fr); }
+            .resumo-item .valor { font-size: 1.1rem; }
         }
     </style>
 </head>
 <body>
+
+    <!-- ===== HEADER ===== -->
+    <div class="header">
+        <h1>⚙️ CENTRAL DE PROJETOS & CORE TOOLS</h1>
+        <div class="header-info">
+            <span><span class="status-dot"></span>Sistema Online</span>
+            <span id="dataAtual">--/--/----</span>
+            <span class="clock" id="relogio">00:00:00</span>
+        </div>
+    </div>
+
+    <!-- ===== GRID ===== -->
     <div class="dashboard-grid">
+
+        <!-- PAINEL 1 — PROJETOS -->
         <div class="panel panel-1">
-            <h2 id="p1-titulo">Painel 1</h2>
-            <div class="data-content" id="p1-valor">---</div>
-            <div class="data-subtext" id="p1-detalhe">Carregando...</div>
-        </div>
-        <div class="panel panel-2">
-            <h2 id="p2-titulo">Painel 2</h2>
-            <div class="data-content" id="p2-valor">---</div>
-            <div class="data-subtext" id="p2-detalhe">Carregando...</div>
-        </div>
-        <div class="panel panel-3">
-            <h2>Comunicação Interna</h2>
-            <div class="data-content">
-                <div class="info-block">
-                    <span class="label">Meta do Turno</span>
-                    <span class="value" id="p3-meta">---</span>
+            <div class="panel-title">
+                <span><i>📁</i>Projetos em Andamento</span>
+                <span class="badge" id="p1-badge">--</span>
+            </div>
+            <div class="projetos-lista" id="p1-lista">
+                <div style="color:#64748b; text-align:center; padding:20px;">Carregando projetos...</div>
+            </div>
+            <div class="resumo-footer">
+                <div class="resumo-item resumo-total">
+                    <div class="valor" id="p1-total">0</div>
+                    <div class="label">Total</div>
                 </div>
-                <div class="info-block">
-                    <span class="label">Próxima Manutenção</span>
-                    <span class="value" id="p3-manutencao">---</span>
+                <div class="resumo-item resumo-concluido">
+                    <div class="valor" id="p1-concluidos">0</div>
+                    <div class="label">Concluídos</div>
                 </div>
-                <div class="info-block">
-                    <span class="label">Aviso Geral</span>
-                    <span class="value" id="p3-aviso" style="font-size: 1.3rem;">---</span>
+                <div class="resumo-item resumo-andamento">
+                    <div class="valor" id="p1-andamento">0</div>
+                    <div class="label">Em Andamento</div>
+                </div>
+                <div class="resumo-item resumo-atrasado">
+                    <div class="valor" id="p1-atrasados">0</div>
+                    <div class="label">Atrasados</div>
                 </div>
             </div>
+        </div>
+
+        <!-- PAINEL 2 — CORE TOOLS -->
+        <div class="panel panel-2">
+            <div class="panel-title">
+                <span><i>🛠️</i>Core Tools — Status</span>
+                <span class="badge" style="background:rgba(16,185,129,0.15); color:#34d399;">Qualidade</span>
+            </div>
+            <div class="tools-grid" id="p2-grid">
+                <div style="color:#64748b; grid-column:1/-1; text-align:center; padding:20px;">Carregando ferramentas...</div>
+            </div>
+        </div>
+
+        <!-- PAINEL 3 — VÍDEO -->
+        <div class="panel panel-3">
+            <div class="panel-title">
+                <span><i>🎬</i>Treinamento em Destaque</span>
+                <span class="badge" style="background:rgba(245,158,11,0.15); color:#fbbf24;" id="p3-contador">1 / 1</span>
+            </div>
+            <div class="video-container">
+                <iframe
+                    id="videoFrame"
+                    class="video-frame"
+                    src=""
+                    title="Treinamento"
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                    allowfullscreen>
+                </iframe>
+                <div class="progresso-video">
+                    <div class="progresso-video-fill" id="progressoVideo"></div>
+                </div>
+                <div class="video-info">
+                    <div class="video-meta">
+                        <h3 id="videoTitulo">Carregando...</h3>
+                        <p id="videoDescricao">--</p>
+                    </div>
+                    <span class="video-duracao" id="videoDuracao">--:--</span>
+                </div>
+            </div>
+            <div class="playlist-nav" id="playlistNav"></div>
         </div>
     </div>
 
     <script>
-        // Caminhos relativos — funcionam direto no GitHub Pages
+        // ===================== CONFIGURAÇÃO =====================
         const FONTES = {
             painel1: './dados/painel1.json',
             painel2: './dados/painel2.json',
             painel3: './dados/painel3.json'
         };
 
+        let videosPlaylist = [];
+        let videoAtual = 0;
+        let tempoTrocaVideo = 30; // segundos
+        let intervaloVideo = null;
+        let intervaloProgresso = null;
+        let segundosDecorridos = 0;
+
+        // ===================== UTILITÁRIOS =====================
         async function buscar(url) {
             try {
-                const r = await fetch(url + '?v=' + Date.now()); // cache-bust
-                if (!r.ok) throw new Error('Falha ao carregar ' + url);
+                const r = await fetch(url + '?v=' + Date.now());
+                if (!r.ok) throw new Error('Erro ' + url);
                 return await r.json();
             } catch (e) {
-                console.error(e);
+                console.error('Falha ao buscar', url, e);
                 return null;
             }
         }
 
+        function classeStatus(status) {
+            const s = (status || '').toLowerCase();
+            if (s.includes('conclu')) return 'status-concluido';
+            if (s.includes('execu')) return 'status-execucao';
+            if (s.includes('revis')) return 'status-revisao';
+            if (s.includes('aguard')) return 'status-aguardando';
+            return 'status-execucao';
+        }
+
+        function classeBolinha(status) {
+            const s = (status || '').toLowerCase();
+            if (s.includes('verde')) return 'status-verde';
+            if (s.includes('amarelo')) return 'status-amarelo';
+            if (s.includes('vermelho')) return 'status-vermelho';
+            return 'status-verde';
+        }
+
+        // ===================== RELÓGIO =====================
+        function atualizarRelogio() {
+            const agora = new Date();
+            document.getElementById('relogio').textContent =
+                agora.toLocaleTimeString('pt-BR');
+            document.getElementById('dataAtual').textContent =
+                agora.toLocaleDateString('pt-BR');
+        }
+        setInterval(atualizarRelogio, 1000);
+        atualizarRelogio();
+
+        // ===================== PAINEL 1 — PROJETOS =====================
         async function atualizarPainel1() {
-            const d = await buscar(FONTES.painel1);
-            if (!d) return;
-            document.getElementById('p1-titulo').textContent = d.titulo || 'Painel 1';
-            document.getElementById('p1-valor').textContent = d.valor || '---';
-            document.getElementById('p1-detalhe').textContent = d.detalhe || '';
-            document.getElementById('p1-valor').classList.add('updating');
-            setTimeout(() => document.getElementById('p1-valor').classList.remove('updating'), 500);
+            const dados = await buscar(FONTES.painel1);
+            if (!dados) return;
+
+            const lista = document.getElementById('p1-lista');
+            lista.innerHTML = '';
+
+            dados.projetos.forEach(p => {
+                const item = document.createElement('div');
+                item.className = 'projeto-item';
+                item.style.borderLeftColor = p.cor || '#3b82f6';
+                item.innerHTML = `
+                    <div class="projeto-linha1">
+                        <span class="projeto-nome">${p.nome}</span>
+                        <span class="projeto-status ${classeStatus(p.status)}">${p.status}</span>
+                    </div>
+                    <div class="projeto-progresso">
+                        <div class="barra-bg">
+                            <div class="barra-fill" style="width:${p.progresso}%; background:${p.cor};"></div>
+                        </div>
+                        <span class="projeto-pct">${p.progresso}%</span>
+                    </div>
+                `;
+                lista.appendChild(item);
+            });
+
+            // Resumo
+            const r = dados.resumo || {};
+            document.getElementById('p1-total').textContent = r.total || dados.projetos.length;
+            document.getElementById('p1-concluidos').textContent = r.concluidos || 0;
+            document.getElementById('p1-andamento').textContent = r.emAndamento || 0;
+            document.getElementById('p1-atrasados').textContent = r.atrasados || 0;
+            document.getElementById('p1-badge').textContent = (dados.projetos.length) + ' ativos';
         }
 
+        // ===================== PAINEL 2 — CORE TOOLS =====================
         async function atualizarPainel2() {
-            const d = await buscar(FONTES.painel2);
-            if (!d) return;
-            document.getElementById('p2-titulo').textContent = d.titulo || 'Painel 2';
-            document.getElementById('p2-valor').textContent = d.valor || '---';
-            document.getElementById('p2-detalhe').textContent = d.detalhe || '';
-            document.getElementById('p2-valor').classList.add('updating');
-            setTimeout(() => document.getElementById('p2-valor').classList.remove('updating'), 500);
+            const dados = await buscar(FONTES.painel2);
+            if (!dados) return;
+
+            const grid = document.getElementById('p2-grid');
+            grid.innerHTML = '';
+
+            dados.ferramentas.forEach(f => {
+                const card = document.createElement('div');
+                card.className = 'tool-card';
+                card.innerHTML = `
+                    <div class="tool-icone">${f.icone || '🔧'}</div>
+                    <div class="tool-sigla">${f.sigla}</div>
+                    <div class="tool-nome">${f.nome}</div>
+                    <div class="tool-status-bolinha ${classeBolinha(f.status)}"></div>
+                    <div class="tool-nivel">${f.nivel}%</div>
+                `;
+                card.title = `${f.nome} — Responsável: ${f.responsavel}`;
+                grid.appendChild(card);
+            });
         }
 
-        async function atualizarPainel3() {
-            const d = await buscar(FONTES.painel3);
-            if (!d) return;
-            document.getElementById('p3-meta').textContent = d.meta || '---';
-            document.getElementById('p3-manutencao').textContent = d.manutencao || '---';
-            document.getElementById('p3-aviso').textContent = d.aviso || '---';
+        // ===================== PAINEL 3 — VÍDEO =====================
+        async function carregarPlaylist() {
+            const dados = await buscar(FONTES.painel3);
+            if (!dados || !dados.videos) return;
+
+            videosPlaylist = dados.videos;
+            tempoTrocaVideo = dados.tempoTroca || 30;
+
+            montarNavPlaylist();
+            tocarVideo(0);
+            iniciarCicloVideo();
         }
 
-        function atualizarTudo() {
-            atualizarPainel1();
-            atualizarPainel2();
-            atualizarPainel3();
+        function montarNavPlaylist() {
+            const nav = document.getElementById('playlistNav');
+            nav.innerHTML = '';
+            videosPlaylist.forEach((v, i) => {
+                const dot = document.createElement('div');
+                dot.className = 'playlist-dot';
+                dot.textContent = i + 1;
+                dot.title = v.titulo;
+                dot.addEventListener('click', () => {
+                    tocarVideo(i);
+                    reiniciarCiclo();
+                });
+                nav.appendChild(dot);
+            });
         }
 
+        function tocarVideo(index) {
+            if (!videosPlaylist.length) return;
+            videoAtual = index;
+            const v = videosPlaylist[index];
+
+            // Atualiza iframe
+            const iframe = document.getElementById('videoFrame');
+            iframe.src = `https://www.youtube.com/embed/${v.id}?autoplay=1&mute=1&rel=0&modestbranding=1`;
+
+            // Atualiza metadados
+            document.getElementById('videoTitulo').textContent = v.titulo;
+            document.getElementById('videoDescricao').textContent = v.descricao;
+            document.getElementById('videoDuracao').textContent = v.duracao;
+            document.getElementById('p3-contador').textContent =
+                `${index + 1} / ${videosPlaylist.length}`;
+
+            // Atualiza dots
+            document.querySelectorAll('.playlist-dot').forEach((d, i) => {
+                d.classList.toggle('active', i === index);
+            });
+
+            // Reinicia progresso
+            segundosDecorridos = 0;
+            document.getElementById('progressoVideo').style.width = '0%';
+        }
+
+        function iniciarCicloVideo() {
+            // Ciclo de troca de vídeo
+            intervaloVideo = setInterval(() => {
+                // Marca atual como "done"
+                const dots = document.querySelectorAll('.playlist-dot');
+                if (dots[videoAtual]) dots[videoAtual].classList.add('done');
+
+                const proximo = (videoAtual + 1) % videosPlaylist.length;
+                tocarVideo(proximo);
+                segundosDecorridos = 0;
+            }, tempoTrocaVideo * 1000);
+
+            // Progresso visual
+            intervaloProgresso = setInterval(() => {
+                segundosDecorridos++;
+                const pct = (segundosDecorridos / tempoTrocaVideo) * 100;
+                document.getElementById('progressoVideo').style.width = pct + '%';
+            }, 1000);
+        }
+
+        function reiniciarCiclo() {
+            clearInterval(intervaloVideo);
+            clearInterval(intervaloProgresso);
+            segundosDecorridos = 0;
+            iniciarCicloVideo();
+        }
+
+        // ===================== INICIALIZAÇÃO =====================
+        async function atualizarTudo() {
+            await Promise.all([
+                atualizarPainel1(),
+                atualizarPainel2()
+            ]);
+        }
+
+        // Primeira carga
         atualizarTudo();
-        setInterval(atualizarTudo, 30000); // atualiza a cada 30s
+        carregarPlaylist();
+
+        // Atualiza dados a cada 30s (exceto vídeo, que tem ciclo próprio)
+        setInterval(atualizarTudo, 30000);
+
+        console.log('%c🎯 Central de Projetos & Core Tools', 'color:#3b82f6; font-size:16px; font-weight:bold;');
     </script>
 </body>
 </html>
