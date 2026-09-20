@@ -1,5 +1,45 @@
 {
-  "titulo": "Qualidade",
-  "valor": "98.5%",
-  "detalhe": "First Pass Yield"
+  "titulo": "Core Tools - Status",
+  "ferramentas": [
+    {
+      "sigla": "APQP",
+      "nome": "Advanced Product Quality Planning",
+      "nivel": 85,
+      "status": "Verde",
+      "responsavel": "Eng. Qualidade",
+      "icone": "📋"
+    },
+    {
+      "sigla": "FMEA",
+      "nome": "Failure Mode and Effects Analysis",
+      "nivel": 62,
+      "status": "Amarelo",
+      "responsavel": "Eng. Processos",
+      "icone": "⚠️"
+    },
+    {
+      "sigla": "MSA",
+      "nome": "Measurement System Analysis",
+      "nivel": 40,
+      "status": "Vermelho",
+      "responsavel": "Metrologia",
+      "icone": "📏"
+    },
+    {
+      "sigla": "SPC",
+      "nome": "Statistical Process Control",
+      "nivel": 92,
+      "status": "Verde",
+      "responsavel": "Eng. Qualidade",
+      "icone": "📊"
+    },
+    {
+      "sigla": "PPAP",
+      "nome": "Production Part Approval Process",
+      "nivel": 78,
+      "status": "Amarelo",
+      "responsavel": "Eng. Cliente",
+      "icone": "✅"
+    }
+  ]
 }
