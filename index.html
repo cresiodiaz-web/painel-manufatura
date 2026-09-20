@@ -849,4 +849,78 @@
         async function carregarPlaylist() {
             const dados = await buscar(FONTES.painel3);
             if (!dados || !dados.videos) return;
-           
+            videosPlaylist = dados.videos;
+            tempoTrocaVideo = dados.tempoTroca || 30;
+            montarNavPlaylist();
+            tocarVideo(0);
+            iniciarCicloVideo();
+        }
+
+        function montarNavPlaylist() {
+            const nav = document.getElementById('playlistNav');
+            nav.innerHTML = '';
+            videosPlaylist.forEach((v, i) => {
+                const dot = document.createElement('div');
+                dot.className = 'playlist-dot';
+                dot.textContent = i + 1;
+                dot.title = v.titulo;
+                dot.addEventListener('click', () => {
+                    tocarVideo(i);
+                    reiniciarCiclo();
+                });
+                nav.appendChild(dot);
+            });
+        }
+
+        function tocarVideo(index) {
+            if (!videosPlaylist.length) return;
+            videoAtual = index;
+            const v = videosPlaylist[index];
+            const iframe = document.getElementById('videoFrame');
+            iframe.src = `https://www.youtube.com/embed/${v.id}?autoplay=1&mute=1&rel=0&modestbranding=1`;
+            document.getElementById('videoTitulo').textContent = v.titulo;
+            document.getElementById('videoDescricao').textContent = v.descricao;
+            document.getElementById('videoDuracao').textContent = v.duracao;
+            document.getElementById('p3-contador').textContent = `${index + 1} / ${videosPlaylist.length}`;
+            document.querySelectorAll('.playlist-dot').forEach((d, i) => {
+                d.classList.toggle('active', i === index);
+            });
+            segundosDecorridos = 0;
+            document.getElementById('progressoVideo').style.width = '0%';
+        }
+
+        function iniciarCicloVideo() {
+            intervaloVideo = setInterval(() => {
+                const dots = document.querySelectorAll('.playlist-dot');
+                if (dots[videoAtual]) dots[videoAtual].classList.add('done');
+                const proximo = (videoAtual + 1) % videosPlaylist.length;
+                tocarVideo(proximo);
+                segundosDecorridos = 0;
+            }, tempoTrocaVideo * 1000);
+
+            intervaloProgresso = setInterval(() => {
+                segundosDecorridos++;
+                const pct = (segundosDecorridos / tempoTrocaVideo) * 100;
+                document.getElementById('progressoVideo').style.width = pct + '%';
+            }, 1000);
+        }
+
+        function reiniciarCiclo() {
+            clearInterval(intervaloVideo);
+            clearInterval(intervaloProgresso);
+            segundosDecorridos = 0;
+            iniciarCicloVideo();
+        }
+
+        // ===================== INICIALIZAÇÃO =====================
+        async function atualizarTudo() {
+            await Promise.all([atualizarPainel1(), atualizarPainel2()]);
+        }
+        atualizarTudo();
+        carregarPlaylist();
+        setInterval(atualizarTudo, 30000);
+
+        console.log('%c🎯 Painel com gráfico de rosca + QR Code', 'color:#3b82f6; font-size:14px; font-weight:bold;');
+    </script>
+</body>
+</html>
