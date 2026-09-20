@@ -1,12 +1,12 @@
 {
   "titulo": "Projetos em Andamento",
   "projetos": [
-    { "nome": "APQP - Linha SMT-04", "status": "Em execução", "progresso": 68, "cor": "#3b82f6" },
-    { "nome": "PPAP - Cliente Valeo", "status": "Concluído", "progresso": 100, "cor": "#10b981" },
-    { "nome": "FMEA - Processo Solda", "status": "Revisão", "progresso": 45, "cor": "#f59e0b" },
-    { "nome": "MSA - Estudo R&R", "status": "Em execução", "progresso": 30, "cor": "#8b5cf6" },
-    { "nome": "SPC - Cartas de Controle", "status": "Concluído", "progresso": 100, "cor": "#10b981" },
-    { "nome": "APQP - Linha SMT-05", "status": "Aguardando", "progresso": 15, "cor": "#a78bfa" }
+    { "nome": "APQP - Linha SMT-04", "status": "Em execução", "progresso": 68, "cor": "#1e40af" },
+    { "nome": "PPAP - Cliente Valeo", "status": "Concluído", "progresso": 100, "cor": "#059669" },
+    { "nome": "FMEA - Processo Solda", "status": "Revisão", "progresso": 45, "cor": "#d97706" },
+    { "nome": "MSA - Estudo R&R", "status": "Em execução", "progresso": 30, "cor": "#7c3aed" },
+    { "nome": "SPC - Cartas de Controle", "status": "Concluído", "progresso": 100, "cor": "#059669" },
+    { "nome": "APQP - Linha SMT-05", "status": "Aguardando", "progresso": 15, "cor": "#6d28d9" }
   ],
   "resumo": {
     "total": 6,
@@ -16,5 +16,14 @@
     "aguardando": 1,
     "atrasados": 0
   },
-  "urlPainel": "https://cresiodiaz-web.github.io/painel-manufatura/"
+  "urlPainel": "https://SEU-USUARIO.github.io/painel-manufatura/",
+  "avisos": [
+    "🏆 Parabéns à equipe do Turno A pelo recorde de produtividade da linha SMT-03!",
+    "📅 Reunião de acompanhamento APQP — 20/05 às 14h na sala de qualidade",
+    "⚠️ Auditoria interna de FMEA agendada para a próxima semana",
+    "✅ PPAP do Cliente Valeo aprovado em primeira submissão",
+    "📦 Novo lote de componentes chega amanhã às 09h — conferir recebimento",
+    "🎯 Meta do trimestre: 95% de aprovação em primeira submissão de PPAP",
+    "👥 Treinamento de SPC para novos analistas — inscrições abertas"
+  ]
 }
