@@ -4,6 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Painel de Projetos & Core Tools</title>
+    <!-- Chart.js para o gráfico de rosca -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"></script>
+    <!-- Biblioteca de QR Code -->
+    <script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js"></script>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
 
@@ -59,6 +63,23 @@
             50% { box-shadow: 0 0 0 8px rgba(16,185,129,0); }
         }
 
+        /* ===== BOTÃO TELA CHEIA ===== */
+        .btn-fullscreen {
+            background: rgba(59,130,246,0.15);
+            color: #60a5fa;
+            border: 1px solid rgba(59,130,246,0.3);
+            padding: 6px 14px;
+            border-radius: 8px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+        .btn-fullscreen:hover {
+            background: rgba(59,130,246,0.25);
+            color: #93c5fd;
+        }
+
         /* ===== GRID ===== */
         .dashboard-grid {
             display: grid;
@@ -108,19 +129,38 @@
             letter-spacing: 0.5px;
         }
 
-        /* ===== PAINEL 1 — PROJETOS ===== */
+        /* ===== PAINEL 1 — LAYOUT DIVIDIDO ===== */
+        .p1-conteudo {
+            display: grid;
+            grid-template-columns: 1.4fr 1fr;
+            gap: 16px;
+            flex: 1;
+            min-height: 0;
+        }
+        .projetos-coluna {
+            display: flex;
+            flex-direction: column;
+            min-height: 0;
+        }
         .projetos-lista {
             display: flex;
             flex-direction: column;
-            gap: 10px;
+            gap: 8px;
             overflow-y: auto;
             flex: 1;
+            padding-right: 4px;
         }
+        .projetos-lista::-webkit-scrollbar { width: 4px; }
+        .projetos-lista::-webkit-scrollbar-thumb {
+            background: rgba(255,255,255,0.1);
+            border-radius: 4px;
+        }
+
         .projeto-item {
             background: rgba(255,255,255,0.03);
             border-left: 4px solid #3b82f6;
             border-radius: 8px;
-            padding: 10px 14px;
+            padding: 9px 12px;
             transition: 0.2s;
         }
         .projeto-item:hover { background: rgba(255,255,255,0.06); }
@@ -128,20 +168,25 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 6px;
+            margin-bottom: 5px;
+            gap: 8px;
         }
         .projeto-nome {
-            font-size: 0.92rem;
+            font-size: 0.82rem;
             font-weight: 600;
             color: #f1f5f9;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
         }
         .projeto-status {
-            font-size: 0.7rem;
-            padding: 3px 8px;
+            font-size: 0.62rem;
+            padding: 2px 7px;
             border-radius: 10px;
-            font-weight: 600;
+            font-weight: 700;
             text-transform: uppercase;
             letter-spacing: 0.4px;
+            white-space: nowrap;
         }
         .status-concluido { background: rgba(16,185,129,0.15); color: #34d399; }
         .status-execucao { background: rgba(59,130,246,0.15); color: #60a5fa; }
@@ -151,11 +196,11 @@
         .projeto-progresso {
             display: flex;
             align-items: center;
-            gap: 10px;
+            gap: 8px;
         }
         .barra-bg {
             flex: 1;
-            height: 6px;
+            height: 5px;
             background: rgba(255,255,255,0.08);
             border-radius: 4px;
             overflow: hidden;
@@ -166,12 +211,28 @@
             transition: width 0.8s ease;
         }
         .projeto-pct {
-            font-size: 0.8rem;
+            font-size: 0.7rem;
             font-weight: 700;
             color: #cbd5e1;
-            min-width: 40px;
+            min-width: 34px;
             text-align: right;
             font-family: 'Courier New', monospace;
+        }
+
+        /* Coluna do gráfico de rosca */
+        .grafico-coluna {
+            display: flex;
+            flex-direction: column;
+            min-height: 0;
+        }
+        .grafico-wrapper {
+            flex: 1;
+            position: relative;
+            min-height: 0;
+        }
+        .grafico-wrapper canvas {
+            width: 100% !important;
+            height: 100% !important;
         }
 
         .resumo-footer {
@@ -182,16 +243,14 @@
             margin-top: 10px;
             flex-shrink: 0;
         }
-        .resumo-item {
-            text-align: center;
-        }
+        .resumo-item { text-align: center; }
         .resumo-item .valor {
-            font-size: 1.4rem;
+            font-size: 1.3rem;
             font-weight: 800;
             font-family: 'Courier New', monospace;
         }
         .resumo-item .label {
-            font-size: 0.65rem;
+            font-size: 0.6rem;
             color: #64748b;
             text-transform: uppercase;
             letter-spacing: 1px;
@@ -228,10 +287,7 @@
             transform: translateY(-3px);
             border-color: #10b981;
         }
-        .tool-icone {
-            font-size: 1.6rem;
-            line-height: 1;
-        }
+        .tool-icone { font-size: 1.6rem; line-height: 1; }
         .tool-sigla {
             font-size: 0.85rem;
             font-weight: 800;
@@ -356,6 +412,74 @@
             transition: width 1s linear;
         }
 
+        /* ===== QR CODE FLUTUANTE ===== */
+        .qr-flutuante {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: #fff;
+            padding: 10px;
+            border-radius: 12px;
+            box-shadow: 0 8px 30px rgba(0,0,0,0.5);
+            z-index: 999;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 6px;
+            transition: 0.3s;
+            cursor: pointer;
+        }
+        .qr-flutuante:hover {
+            transform: scale(1.05);
+            box-shadow: 0 10px 40px rgba(59,130,246,0.5);
+        }
+        .qr-flutuante #qrcode {
+            width: 100px;
+            height: 100px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .qr-flutuante #qrcode img,
+        .qr-flutuante #qrcode canvas {
+            width: 100% !important;
+            height: 100% !important;
+        }
+        .qr-label {
+            font-size: 0.65rem;
+            font-weight: 700;
+            color: #0a0f1c;
+            text-align: center;
+            letter-spacing: 0.5px;
+        }
+        .qr-minimizar {
+            position: absolute;
+            top: -8px;
+            right: -8px;
+            background: #ef4444;
+            color: #fff;
+            border: none;
+            width: 22px;
+            height: 22px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 12px;
+            line-height: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .qr-flutuante.minimizado {
+            padding: 8px;
+        }
+        .qr-flutuante.minimizado #qrcode {
+            display: none;
+        }
+        .qr-flutuante.minimizado .qr-label {
+            font-size: 0.75rem;
+            color: #3b82f6;
+        }
+
         /* ===== RESPONSIVO ===== */
         @media (max-width: 900px) {
             body { overflow: auto; height: auto; }
@@ -367,15 +491,18 @@
             .panel-1, .panel-2, .panel-3 {
                 grid-row: auto;
                 grid-column: 1;
-                min-height: 300px;
+                min-height: 340px;
             }
             .panel-3 { min-height: 420px; }
             .tools-grid { grid-template-columns: repeat(3, 1fr); }
+            .p1-conteudo { grid-template-columns: 1fr; }
+            .grafico-coluna { min-height: 180px; }
         }
         @media (max-width: 500px) {
             .header { flex-direction: column; height: auto; padding: 10px; gap: 8px; }
             .tools-grid { grid-template-columns: repeat(2, 1fr); }
-            .resumo-item .valor { font-size: 1.1rem; }
+            .qr-flutuante { bottom: 10px; right: 10px; }
+            .qr-flutuante #qrcode { width: 70px; height: 70px; }
         }
     </style>
 </head>
@@ -388,20 +515,34 @@
             <span><span class="status-dot"></span>Sistema Online</span>
             <span id="dataAtual">--/--/----</span>
             <span class="clock" id="relogio">00:00:00</span>
+            <button class="btn-fullscreen" id="btnFullscreen">
+                ⛶ Tela Cheia
+            </button>
         </div>
     </div>
 
     <!-- ===== GRID ===== -->
     <div class="dashboard-grid">
 
-        <!-- PAINEL 1 — PROJETOS -->
+        <!-- PAINEL 1 — PROJETOS + GRÁFICO -->
         <div class="panel panel-1">
             <div class="panel-title">
                 <span><i>📁</i>Projetos em Andamento</span>
                 <span class="badge" id="p1-badge">--</span>
             </div>
-            <div class="projetos-lista" id="p1-lista">
-                <div style="color:#64748b; text-align:center; padding:20px;">Carregando projetos...</div>
+            <div class="p1-conteudo">
+                <!-- Coluna lista -->
+                <div class="projetos-coluna">
+                    <div class="projetos-lista" id="p1-lista">
+                        <div style="color:#64748b; text-align:center; padding:20px;">Carregando...</div>
+                    </div>
+                </div>
+                <!-- Coluna gráfico rosca -->
+                <div class="grafico-coluna">
+                    <div class="grafico-wrapper">
+                        <canvas id="graficoProjetos"></canvas>
+                    </div>
+                </div>
             </div>
             <div class="resumo-footer">
                 <div class="resumo-item resumo-total">
@@ -414,7 +555,7 @@
                 </div>
                 <div class="resumo-item resumo-andamento">
                     <div class="valor" id="p1-andamento">0</div>
-                    <div class="label">Em Andamento</div>
+                    <div class="label">Andamento</div>
                 </div>
                 <div class="resumo-item resumo-atrasado">
                     <div class="valor" id="p1-atrasados">0</div>
@@ -430,7 +571,7 @@
                 <span class="badge" style="background:rgba(16,185,129,0.15); color:#34d399;">Qualidade</span>
             </div>
             <div class="tools-grid" id="p2-grid">
-                <div style="color:#64748b; grid-column:1/-1; text-align:center; padding:20px;">Carregando ferramentas...</div>
+                <div style="color:#64748b; grid-column:1/-1; text-align:center; padding:20px;">Carregando...</div>
             </div>
         </div>
 
@@ -464,6 +605,13 @@
         </div>
     </div>
 
+    <!-- ===== QR CODE FLUTUANTE ===== -->
+    <div class="qr-flutuante" id="qrFlutuante" title="Aponte a câmera do celular para abrir o painel">
+        <button class="qr-minimizar" id="qrMinimizar" title="Minimizar QR">−</button>
+        <div id="qrcode"></div>
+        <div class="qr-label">📱 Abrir no celular</div>
+    </div>
+
     <script>
         // ===================== CONFIGURAÇÃO =====================
         const FONTES = {
@@ -472,9 +620,13 @@
             painel3: './dados/painel3.json'
         };
 
+        // URL padrão do painel (caso o JSON não traga) — será usada no QR Code
+        const URL_PADRAO_PAINEL = window.location.href.split('?')[0];
+
+        let graficoProjetos = null;
         let videosPlaylist = [];
         let videoAtual = 0;
-        let tempoTrocaVideo = 30; // segundos
+        let tempoTrocaVideo = 30;
         let intervaloVideo = null;
         let intervaloProgresso = null;
         let segundosDecorridos = 0;
@@ -511,22 +663,52 @@
         // ===================== RELÓGIO =====================
         function atualizarRelogio() {
             const agora = new Date();
-            document.getElementById('relogio').textContent =
-                agora.toLocaleTimeString('pt-BR');
-            document.getElementById('dataAtual').textContent =
-                agora.toLocaleDateString('pt-BR');
+            document.getElementById('relogio').textContent = agora.toLocaleTimeString('pt-BR');
+            document.getElementById('dataAtual').textContent = agora.toLocaleDateString('pt-BR');
         }
         setInterval(atualizarRelogio, 1000);
         atualizarRelogio();
 
-        // ===================== PAINEL 1 — PROJETOS =====================
+        // ===================== BOTÃO TELA CHEIA =====================
+        document.getElementById('btnFullscreen').addEventListener('click', () => {
+            if (!document.fullscreenElement) {
+                document.documentElement.requestFullscreen();
+            } else {
+                document.exitFullscreen();
+            }
+        });
+
+        // ===================== QR CODE =====================
+        function gerarQRCode(url) {
+            const container = document.getElementById('qrcode');
+            container.innerHTML = '';
+            new QRCode(container, {
+                text: url,
+                width: 120,
+                height: 120,
+                colorDark: '#0a0f1c',
+                colorLight: '#ffffff',
+                correctLevel: QRCode.CorrectLevel.M
+            });
+        }
+
+        // Minimizar QR Code
+        document.getElementById('qrMinimizar').addEventListener('click', (e) => {
+            e.stopPropagation();
+            const qr = document.getElementById('qrFlutuante');
+            qr.classList.toggle('minimizado');
+            const btn = document.getElementById('qrMinimizar');
+            btn.textContent = qr.classList.contains('minimizado') ? '📱' : '−';
+        });
+
+        // ===================== PAINEL 1 — PROJETOS + GRÁFICO =====================
         async function atualizarPainel1() {
             const dados = await buscar(FONTES.painel1);
             if (!dados) return;
 
+            // Lista de projetos
             const lista = document.getElementById('p1-lista');
             lista.innerHTML = '';
-
             dados.projetos.forEach(p => {
                 const item = document.createElement('div');
                 item.className = 'projeto-item';
@@ -546,23 +728,108 @@
                 lista.appendChild(item);
             });
 
-            // Resumo
+            // Resumo numérico
             const r = dados.resumo || {};
             document.getElementById('p1-total').textContent = r.total || dados.projetos.length;
             document.getElementById('p1-concluidos').textContent = r.concluidos || 0;
             document.getElementById('p1-andamento').textContent = r.emAndamento || 0;
             document.getElementById('p1-atrasados').textContent = r.atrasados || 0;
-            document.getElementById('p1-badge').textContent = (dados.projetos.length) + ' ativos';
+            document.getElementById('p1-badge').textContent = dados.projetos.length + ' ativos';
+
+            // ===== GRÁFICO DE ROSCA =====
+            const contagem = {
+                'Concluído': 0,
+                'Em execução': 0,
+                'Revisão': 0,
+                'Aguardando': 0,
+                'Atrasado': 0
+            };
+            dados.projetos.forEach(p => {
+                const s = (p.status || '').toLowerCase();
+                if (s.includes('conclu')) contagem['Concluído']++;
+                else if (s.includes('execu')) contagem['Em execução']++;
+                else if (s.includes('revis')) contagem['Revisão']++;
+                else if (s.includes('aguard')) contagem['Aguardando']++;
+                else if (s.includes('atras')) contagem['Atrasado']++;
+            });
+
+            const labels = Object.keys(contagem).filter(k => contagem[k] > 0);
+            const valores = labels.map(k => contagem[k]);
+            const cores = labels.map(l => {
+                if (l === 'Concluído') return '#10b981';
+                if (l === 'Em execução') return '#3b82f6';
+                if (l === 'Revisão') return '#f59e0b';
+                if (l === 'Aguardando') return '#a78bfa';
+                if (l === 'Atrasado') return '#ef4444';
+                return '#64748b';
+            });
+
+            const ctx = document.getElementById('graficoProjetos').getContext('2d');
+            if (graficoProjetos) {
+                graficoProjetos.data.labels = labels;
+                graficoProjetos.data.datasets[0].data = valores;
+                graficoProjetos.data.datasets[0].backgroundColor = cores;
+                graficoProjetos.update('none');
+            } else {
+                graficoProjetos = new Chart(ctx, {
+                    type: 'doughnut',
+                    data: {
+                        labels: labels,
+                        datasets: [{
+                            data: valores,
+                            backgroundColor: cores,
+                            borderColor: '#111827',
+                            borderWidth: 3,
+                            hoverOffset: 8
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        cutout: '60%',
+                        plugins: {
+                            legend: {
+                                position: 'bottom',
+                                labels: {
+                                    color: '#94a3b8',
+                                    font: { size: 10, family: 'Segoe UI' },
+                                    padding: 8,
+                                    boxWidth: 10,
+                                    boxHeight: 10,
+                                    usePointStyle: true
+                                }
+                            },
+                            tooltip: {
+                                backgroundColor: '#0f172a',
+                                titleColor: '#fff',
+                                bodyColor: '#e2e8f0',
+                                borderColor: '#3b82f6',
+                                borderWidth: 1,
+                                padding: 10,
+                                callbacks: {
+                                    label: (ctx) => {
+                                        const total = ctx.dataset.data.reduce((a,b)=>a+b,0);
+                                        const pct = ((ctx.raw / total) * 100).toFixed(0);
+                                        return ` ${ctx.label}: ${ctx.raw} (${pct}%)`;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                });
+            }
+
+            // ===== QR CODE =====
+            const urlParaQR = dados.urlPainel || URL_PADRAO_PAINEL;
+            gerarQRCode(urlParaQR);
         }
 
         // ===================== PAINEL 2 — CORE TOOLS =====================
         async function atualizarPainel2() {
             const dados = await buscar(FONTES.painel2);
             if (!dados) return;
-
             const grid = document.getElementById('p2-grid');
             grid.innerHTML = '';
-
             dados.ferramentas.forEach(f => {
                 const card = document.createElement('div');
                 card.className = 'tool-card';
@@ -582,100 +849,4 @@
         async function carregarPlaylist() {
             const dados = await buscar(FONTES.painel3);
             if (!dados || !dados.videos) return;
-
-            videosPlaylist = dados.videos;
-            tempoTrocaVideo = dados.tempoTroca || 30;
-
-            montarNavPlaylist();
-            tocarVideo(0);
-            iniciarCicloVideo();
-        }
-
-        function montarNavPlaylist() {
-            const nav = document.getElementById('playlistNav');
-            nav.innerHTML = '';
-            videosPlaylist.forEach((v, i) => {
-                const dot = document.createElement('div');
-                dot.className = 'playlist-dot';
-                dot.textContent = i + 1;
-                dot.title = v.titulo;
-                dot.addEventListener('click', () => {
-                    tocarVideo(i);
-                    reiniciarCiclo();
-                });
-                nav.appendChild(dot);
-            });
-        }
-
-        function tocarVideo(index) {
-            if (!videosPlaylist.length) return;
-            videoAtual = index;
-            const v = videosPlaylist[index];
-
-            // Atualiza iframe
-            const iframe = document.getElementById('videoFrame');
-            iframe.src = `https://www.youtube.com/embed/${v.id}?autoplay=1&mute=1&rel=0&modestbranding=1`;
-
-            // Atualiza metadados
-            document.getElementById('videoTitulo').textContent = v.titulo;
-            document.getElementById('videoDescricao').textContent = v.descricao;
-            document.getElementById('videoDuracao').textContent = v.duracao;
-            document.getElementById('p3-contador').textContent =
-                `${index + 1} / ${videosPlaylist.length}`;
-
-            // Atualiza dots
-            document.querySelectorAll('.playlist-dot').forEach((d, i) => {
-                d.classList.toggle('active', i === index);
-            });
-
-            // Reinicia progresso
-            segundosDecorridos = 0;
-            document.getElementById('progressoVideo').style.width = '0%';
-        }
-
-        function iniciarCicloVideo() {
-            // Ciclo de troca de vídeo
-            intervaloVideo = setInterval(() => {
-                // Marca atual como "done"
-                const dots = document.querySelectorAll('.playlist-dot');
-                if (dots[videoAtual]) dots[videoAtual].classList.add('done');
-
-                const proximo = (videoAtual + 1) % videosPlaylist.length;
-                tocarVideo(proximo);
-                segundosDecorridos = 0;
-            }, tempoTrocaVideo * 1000);
-
-            // Progresso visual
-            intervaloProgresso = setInterval(() => {
-                segundosDecorridos++;
-                const pct = (segundosDecorridos / tempoTrocaVideo) * 100;
-                document.getElementById('progressoVideo').style.width = pct + '%';
-            }, 1000);
-        }
-
-        function reiniciarCiclo() {
-            clearInterval(intervaloVideo);
-            clearInterval(intervaloProgresso);
-            segundosDecorridos = 0;
-            iniciarCicloVideo();
-        }
-
-        // ===================== INICIALIZAÇÃO =====================
-        async function atualizarTudo() {
-            await Promise.all([
-                atualizarPainel1(),
-                atualizarPainel2()
-            ]);
-        }
-
-        // Primeira carga
-        atualizarTudo();
-        carregarPlaylist();
-
-        // Atualiza dados a cada 30s (exceto vídeo, que tem ciclo próprio)
-        setInterval(atualizarTudo, 30000);
-
-        console.log('%c🎯 Central de Projetos & Core Tools', 'color:#3b82f6; font-size:16px; font-weight:bold;');
-    </script>
-</body>
-</html>
+           
