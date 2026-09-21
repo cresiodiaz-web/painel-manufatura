@@ -10,7 +10,6 @@
         * { margin: 0; padding: 0; box-sizing: border-box; }
 
         :root {
-            /* 🎨 PALETA CORPORATIVA */
             --navy-900: #0a1836;
             --navy-800: #0f2555;
             --navy-700: #1a3a7a;
@@ -91,9 +90,7 @@
             animation: ticker-scroll 60s linear infinite;
             padding-left: 100%;
         }
-        .ticker-content:hover {
-            animation-play-state: paused;
-        }
+        .ticker-content:hover { animation-play-state: paused; }
         .ticker-item {
             display: inline-flex;
             align-items: center;
@@ -143,11 +140,7 @@
             justify-content: center;
             box-shadow: 0 4px 15px rgba(212, 175, 55, 0.4);
         }
-        .logo-badge svg {
-            width: 24px;
-            height: 24px;
-            fill: var(--navy-900);
-        }
+        .logo-badge svg { width: 24px; height: 24px; fill: var(--navy-900); }
         .header h1 {
             font-size: 1.35rem;
             letter-spacing: 0.5px;
@@ -211,11 +204,7 @@
             transform: translateY(-2px);
             box-shadow: 0 6px 20px rgba(212, 175, 55, 0.6);
         }
-        .btn-fullscreen svg {
-            width: 14px;
-            height: 14px;
-            fill: var(--navy-900);
-        }
+        .btn-fullscreen svg { width: 14px; height: 14px; fill: var(--navy-900); }
 
         /* ===== GRID ===== */
         .dashboard-grid {
@@ -253,17 +242,11 @@
             border-radius: 18px 18px 0 0;
         }
         .panel-1 { grid-row: 1; grid-column: 1; }
-        .panel-1::before {
-            background: linear-gradient(90deg, var(--navy-600), var(--gold-500));
-        }
+        .panel-1::before { background: linear-gradient(90deg, var(--navy-600), var(--gold-500)); }
         .panel-2 { grid-row: 2; grid-column: 1; }
-        .panel-2::before {
-            background: linear-gradient(90deg, #059669, var(--gold-500));
-        }
+        .panel-2::before { background: linear-gradient(90deg, #059669, var(--gold-500)); }
         .panel-3 { grid-row: 1 / 3; grid-column: 2; }
-        .panel-3::before {
-            background: linear-gradient(90deg, var(--gold-500), #b45309);
-        }
+        .panel-3::before { background: linear-gradient(90deg, var(--gold-500), #b45309); }
 
         .panel-title {
             font-size: 0.82rem;
@@ -292,18 +275,10 @@
             background: linear-gradient(135deg, var(--gold-500), var(--gold-400));
             box-shadow: 0 3px 8px rgba(212, 175, 55, 0.35);
         }
-        .title-icon svg {
-            width: 16px;
-            height: 16px;
-            fill: var(--navy-900);
-        }
-        .title-icon.blue {
-            background: linear-gradient(135deg, var(--navy-600), var(--navy-500));
-        }
+        .title-icon svg { width: 16px; height: 16px; fill: var(--navy-900); }
+        .title-icon.blue { background: linear-gradient(135deg, var(--navy-600), var(--navy-500)); }
         .title-icon.blue svg { fill: var(--white); }
-        .title-icon.green {
-            background: linear-gradient(135deg, #059669, #10b981);
-        }
+        .title-icon.green { background: linear-gradient(135deg, #059669, #10b981); }
         .title-icon.green svg { fill: var(--white); }
 
         .badge {
@@ -330,13 +305,8 @@
             flex: 1;
             min-height: 0;
         }
-        .projetos-coluna {
-            display: flex;
-            flex-direction: column;
-            min-height: 0;
-        }
+        .projetos-coluna { display: flex; flex-direction: column; min-height: 0; }
 
-        /* 🎯 LISTA COM ROLAGEM AUTOMÁTICA */
         .projetos-lista {
             display: flex;
             flex-direction: column;
@@ -345,32 +315,16 @@
             flex: 1;
             padding-right: 4px;
             position: relative;
-            mask-image: linear-gradient(
-                to bottom,
-                transparent 0%,
-                #000 6%,
-                #000 94%,
-                transparent 100%
-            );
-            -webkit-mask-image: linear-gradient(
-                to bottom,
-                transparent 0%,
-                #000 6%,
-                #000 94%,
-                transparent 100%
-            );
+            mask-image: linear-gradient(to bottom, transparent 0%, #000 6%, #000 94%, transparent 100%);
+            -webkit-mask-image: linear-gradient(to bottom, transparent 0%, #000 6%, #000 94%, transparent 100%);
         }
-
         .projetos-track {
             display: flex;
             flex-direction: column;
             gap: 8px;
             animation: rolarProjetos 40s linear infinite;
         }
-
-        .projetos-lista:hover .projetos-track {
-            animation-play-state: paused;
-        }
+        .projetos-lista:hover .projetos-track { animation-play-state: paused; }
 
         @keyframes rolarProjetos {
             0% { transform: translateY(0); }
@@ -433,11 +387,7 @@
             border-radius: 4px;
             overflow: hidden;
         }
-        .barra-fill {
-            height: 100%;
-            border-radius: 4px;
-            transition: width 0.8s ease;
-        }
+        .barra-fill { height: 100%; border-radius: 4px; transition: width 0.8s ease; }
         .projeto-pct {
             font-size: 0.72rem;
             font-weight: 800;
@@ -515,11 +465,7 @@
             justify-content: center;
             background: linear-gradient(135deg, rgba(30, 64, 175, 0.1), rgba(212, 175, 55, 0.15));
         }
-        .tool-icone svg {
-            width: 24px;
-            height: 24px;
-            fill: var(--navy-600);
-        }
+        .tool-icone svg { width: 24px; height: 24px; fill: var(--navy-600); }
         .tool-sigla {
             font-size: 0.85rem;
             font-weight: 900;
@@ -538,18 +484,9 @@
             border-radius: 50%;
             margin-top: 2px;
         }
-        .status-verde {
-            background: #10b981;
-            box-shadow: 0 0 0 4px rgba(16, 185, 129, 0.2);
-        }
-        .status-amarelo {
-            background: #f59e0b;
-            box-shadow: 0 0 0 4px rgba(245, 158, 11, 0.2);
-        }
-        .status-vermelho {
-            background: #ef4444;
-            box-shadow: 0 0 0 4px rgba(239, 68, 68, 0.2);
-        }
+        .status-verde { background: #10b981; box-shadow: 0 0 0 4px rgba(16, 185, 129, 0.2); }
+        .status-amarelo { background: #f59e0b; box-shadow: 0 0 0 4px rgba(245, 158, 11, 0.2); }
+        .status-vermelho { background: #ef4444; box-shadow: 0 0 0 4px rgba(239, 68, 68, 0.2); }
         .tool-nivel {
             font-size: 0.75rem;
             font-weight: 900;
@@ -558,7 +495,7 @@
             margin-top: 2px;
         }
 
-        /* ===== PAINEL 3 ===== */
+        /* ===== PAINEL 3 - VÍDEO ===== */
         .video-container {
             flex: 1;
             border-radius: 14px;
@@ -570,7 +507,48 @@
             box-shadow: 0 6px 25px rgba(212, 175, 55, 0.25);
             border: 2px solid rgba(212, 175, 55, 0.3);
         }
-        .video-frame { width: 100%; flex: 1; border: none; background: #000; }
+
+        /* Player genérico (serve para iframe e video) */
+        .player-wrapper {
+            flex: 1;
+            background: #000;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+        .player-wrapper iframe,
+        .player-wrapper video {
+            width: 100%;
+            height: 100%;
+            border: none;
+            display: block;
+            object-fit: contain;
+        }
+
+        /* Indicador de tipo de vídeo */
+        .tipo-badge {
+            position: absolute;
+            top: 12px;
+            left: 12px;
+            background: rgba(0, 0, 0, 0.7);
+            color: #fff;
+            padding: 4px 10px;
+            border-radius: 6px;
+            font-size: 0.65rem;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            z-index: 5;
+            backdrop-filter: blur(4px);
+        }
+        .tipo-badge.local { background: rgba(30, 64, 175, 0.85); }
+        .tipo-badge.youtube { background: rgba(220, 38, 38, 0.85); }
+        .tipo-badge svg { width: 12px; height: 12px; fill: #fff; }
+
         .video-info {
             padding: 14px 18px;
             background: linear-gradient(135deg, var(--navy-800), var(--navy-700));
@@ -613,35 +591,39 @@
             flex-wrap: wrap;
         }
         .playlist-dot {
-            width: 30px; height: 30px;
-            border-radius: 50%;
+            width: 34px; height: 30px;
+            border-radius: 8px;
             background: var(--white);
             border: 2px solid rgba(212, 175, 55, 0.4);
             cursor: pointer;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 0.75rem;
+            font-size: 0.7rem;
             font-weight: 800;
             color: var(--navy-700);
             transition: 0.2s;
             box-shadow: 0 2px 6px rgba(212, 175, 55, 0.15);
+            position: relative;
+            gap: 3px;
         }
-        .playlist-dot:hover {
-            background: var(--gold-200);
-            transform: scale(1.05);
-        }
+        .playlist-dot:hover { background: var(--gold-200); transform: scale(1.05); }
         .playlist-dot.active {
             background: linear-gradient(135deg, var(--gold-500), var(--gold-400));
             color: var(--navy-900);
             border-color: var(--gold-500);
-            transform: scale(1.15);
+            transform: scale(1.12);
             box-shadow: 0 4px 12px rgba(212, 175, 55, 0.6);
         }
         .playlist-dot.done {
             background: #d1fae5;
             color: #059669;
             border-color: #10b981;
+        }
+        .playlist-dot .mini-icon {
+            width: 10px;
+            height: 10px;
+            fill: currentColor;
         }
 
         .progresso-video {
@@ -720,15 +702,9 @@
             justify-content: center;
             box-shadow: 0 3px 10px rgba(220, 38, 38, 0.5);
         }
-        .qr-flutuante.minimizado {
-            padding: 10px 14px;
-            border-radius: 24px;
-        }
+        .qr-flutuante.minimizado { padding: 10px 14px; border-radius: 24px; }
         .qr-flutuante.minimizado #qrcode { display: none; }
-        .qr-flutuante.minimizado .qr-label {
-            font-size: 0.8rem;
-            color: var(--navy-700);
-        }
+        .qr-flutuante.minimizado .qr-label { font-size: 0.8rem; color: var(--navy-700); }
 
         /* ===== RESPONSIVO ===== */
         @media (max-width: 900px) {
@@ -809,7 +785,6 @@
             </div>
             <div class="p1-conteudo">
                 <div class="projetos-coluna">
-                    <!-- 🎯 Lista com track interno para rolagem automática -->
                     <div class="projetos-lista" id="p1-lista">
                         <div class="projetos-track" id="p1-track">
                             <div style="color:#64748b; text-align:center; padding:20px;">Carregando...</div>
@@ -858,7 +833,7 @@
             </div>
         </div>
 
-        <!-- PAINEL 3 -->
+        <!-- PAINEL 3 - PLAYER MISTO -->
         <div class="panel panel-3">
             <div class="panel-title">
                 <div class="panel-title-left">
@@ -870,9 +845,10 @@
                 <span class="badge badge-gold" id="p3-contador">1 / 1</span>
             </div>
             <div class="video-container">
-                <iframe id="videoFrame" class="video-frame" src="" title="Treinamento"
-                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                    allowfullscreen></iframe>
+                <!-- Container do player — o JS decide se insere <iframe> ou <video> -->
+                <div class="player-wrapper" id="playerWrapper">
+                    <div class="tipo-badge" id="tipoBadge" style="display:none;"></div>
+                </div>
                 <div class="progresso-video">
                     <div class="progresso-video-fill" id="progressoVideo"></div>
                 </div>
@@ -907,10 +883,11 @@
         let graficoProjetos = null;
         let videosPlaylist = [];
         let videoAtual = 0;
-        let tempoTrocaVideo = 30;
+        let tempoTrocaVideo = 60;
         let intervaloVideo = null;
         let intervaloProgresso = null;
         let segundosDecorridos = 0;
+        let videoElementAtual = null; // referência ao <video> quando for local
 
         async function buscar(url) {
             try {
@@ -948,6 +925,10 @@
             'PPAP': '<svg viewBox="0 0 24 24"><path d="M9 16.2l-3.5-3.5L4 14.2l5 5 11-11-1.5-1.5z"/></svg>'
         };
 
+        // Ícones para diferenciar tipo de vídeo na playlist
+        const ICONE_LOCAL = '<svg class="mini-icon" viewBox="0 0 24 24"><path d="M4 6h16v12H4z"/></svg>';
+        const ICONE_YOUTUBE = '<svg class="mini-icon" viewBox="0 0 24 24"><path d="M10 15l5.19-3L10 9v6m11.56-7.83c.13.47.22 1.1.28 1.9.07.8.1 1.49.1 2.09L22 12c0 2.19-.16 3.8-.44 4.83-.25.9-.83 1.48-1.73 1.73-.47.13-1.33.22-2.65.28-1.3.07-2.49.1-3.59.1L12 19c-4.19 0-6.8-.16-7.83-.44-.9-.25-1.48-.83-1.73-1.73-.13-.47-.22-1.1-.28-1.9-.07-.8-.1-1.49-.1-2.09L2 12c0-2.19.16-3.8.44-4.83.25-.9.83-1.48 1.73-1.73.47-.13 1.33-.22 2.65-.28 1.3-.07 2.49-.1 3.59-.1L12 5c4.19 0 6.8.16 7.83.44.9.25 1.48.83 1.73 1.73z"/></svg>';
+
         function atualizarRelogio() {
             const agora = new Date();
             document.getElementById('relogio').textContent = agora.toLocaleTimeString('pt-BR');
@@ -981,7 +962,6 @@
             e.target.textContent = qr.classList.contains('minimizado') ? '📱' : '−';
         });
 
-        // ===== FAIXA DE AVISOS =====
         function montarTicker(avisos) {
             const container = document.getElementById('tickerContent');
             container.innerHTML = '';
@@ -1009,7 +989,6 @@
             const track = document.getElementById('p1-track');
             track.innerHTML = '';
 
-            // Monta a lista UMA vez
             const fragment = document.createDocumentFragment();
             dados.projetos.forEach(p => {
                 const item = document.createElement('div');
@@ -1031,21 +1010,15 @@
             });
             track.appendChild(fragment);
 
-            // 🔁 DUPLICA a lista para o loop contínuo
+            // Duplica para loop contínuo
             const clonado = fragment.cloneNode(true);
             track.appendChild(clonado);
 
-            // ⏱️ Ajusta a velocidade conforme a quantidade de projetos
             const qtdProjetos = dados.projetos.length;
             const duracao = Math.max(20, qtdProjetos * 4);
             track.style.animationDuration = duracao + 's';
+            if (qtdProjetos <= 2) track.style.animation = 'none';
 
-            // Se tiver poucos projetos, não rola
-            if (qtdProjetos <= 2) {
-                track.style.animation = 'none';
-            }
-
-            // ===== Resumo =====
             const r = dados.resumo || {};
             document.getElementById('p1-total').textContent = r.total || dados.projetos.length;
             document.getElementById('p1-concluidos').textContent = r.concluidos || 0;
@@ -1053,7 +1026,6 @@
             document.getElementById('p1-atrasados').textContent = r.atrasados || 0;
             document.getElementById('p1-badge').textContent = dados.projetos.length + ' ativos';
 
-            // ===== Gráfico de rosca =====
             const contagem = { 'Concluído': 0, 'Em execução': 0, 'Revisão': 0, 'Aguardando': 0 };
             dados.projetos.forEach(p => {
                 const s = (p.status || '').toLowerCase();
@@ -1153,12 +1125,12 @@
             });
         }
 
-        // ===== PAINEL 3 =====
+        // ===== PAINEL 3 - PLAYER MISTO =====
         async function carregarPlaylist() {
             const dados = await buscar(FONTES.painel3);
             if (!dados || !dados.videos) return;
             videosPlaylist = dados.videos;
-            tempoTrocaVideo = dados.tempoTroca || 30;
+            tempoTrocaVideo = dados.tempoTroca || 60;
             montarNavPlaylist();
             tocarVideo(0);
             iniciarCicloVideo();
@@ -1170,8 +1142,9 @@
             videosPlaylist.forEach((v, i) => {
                 const dot = document.createElement('div');
                 dot.className = 'playlist-dot';
-                dot.textContent = i + 1;
-                dot.title = v.titulo;
+                dot.title = `${v.titulo} (${v.tipo === 'local' ? 'Local' : 'YouTube'})`;
+                const icone = v.tipo === 'local' ? ICONE_LOCAL : ICONE_YOUTUBE;
+                dot.innerHTML = `${icone}<span>${i + 1}</span>`;
                 dot.addEventListener('click', () => {
                     tocarVideo(i);
                     reiniciarCiclo();
@@ -1184,31 +1157,103 @@
             if (!videosPlaylist.length) return;
             videoAtual = index;
             const v = videosPlaylist[index];
-            document.getElementById('videoFrame').src =
-                `https://www.youtube.com/embed/${v.id}?autoplay=1&mute=1&rel=0&modestbranding=1`;
+
+            // Limpa o player anterior
+            const wrapper = document.getElementById('playerWrapper');
+            wrapper.innerHTML = '';
+
+            // Cria o badge de tipo
+            const badge = document.createElement('div');
+            badge.className = 'tipo-badge ' + (v.tipo === 'local' ? 'local' : 'youtube');
+
+            if (v.tipo === 'local') {
+                // 🔵 VÍDEO LOCAL (MP4)
+                badge.innerHTML = `${ICONE_LOCAL}<span>VÍDEO INTERNO</span>`;
+                wrapper.appendChild(badge);
+
+                const video = document.createElement('video');
+                video.src = v.arquivo;
+                video.controls = false;      // painel de controle oculto (modo telão)
+                video.autoplay = true;
+                video.muted = true;          // obrigatório para autoplay no navegador
+                video.loop = false;
+                video.playsInline = true;
+                video.preload = 'auto';
+
+                // Quando o vídeo local terminar, avança para o próximo
+                video.addEventListener('ended', () => {
+                    avancarVideo();
+                });
+
+                // Se der erro (arquivo não encontrado), pula para o próximo
+                video.addEventListener('error', () => {
+                    console.warn('Erro ao carregar vídeo local:', v.arquivo);
+                    avancarVideo();
+                });
+
+                wrapper.appendChild(video);
+                videoElementAtual = video;
+
+                // Tenta iniciar a reprodução
+                const playPromise = video.play();
+                if (playPromise !== undefined) {
+                    playPromise.catch(err => {
+                        console.warn('Autoplay bloqueado:', err);
+                    });
+                }
+
+            } else {
+                // 🔴 VÍDEO DO YOUTUBE
+                badge.innerHTML = `${ICONE_YOUTUBE}<span>YOUTUBE</span>`;
+                wrapper.appendChild(badge);
+
+                const iframe = document.createElement('iframe');
+                iframe.src = `https://www.youtube.com/embed/${v.id}?autoplay=1&mute=1&rel=0&modestbranding=1`;
+                iframe.title = v.titulo;
+                iframe.allow = 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture';
+                iframe.allowFullscreen = true;
+                wrapper.appendChild(iframe);
+                videoElementAtual = null;
+            }
+
+            // Atualiza metadados
             document.getElementById('videoTitulo').textContent = v.titulo;
             document.getElementById('videoDescricao').textContent = v.descricao;
             document.getElementById('videoDuracao').textContent = v.duracao;
             document.getElementById('p3-contador').textContent = `${index + 1} / ${videosPlaylist.length}`;
+
+            // Atualiza dots da playlist
             document.querySelectorAll('.playlist-dot').forEach((d, i) => {
                 d.classList.toggle('active', i === index);
             });
+
             segundosDecorridos = 0;
             document.getElementById('progressoVideo').style.width = '0%';
         }
 
+        function avancarVideo() {
+            const dots = document.querySelectorAll('.playlist-dot');
+            if (dots[videoAtual]) dots[videoAtual].classList.add('done');
+            const proximo = (videoAtual + 1) % videosPlaylist.length;
+            tocarVideo(proximo);
+            segundosDecorridos = 0;
+        }
+
         function iniciarCicloVideo() {
+            // Timer de troca automática (aplica aos vídeos do YouTube)
             intervaloVideo = setInterval(() => {
-                const dots = document.querySelectorAll('.playlist-dot');
-                if (dots[videoAtual]) dots[videoAtual].classList.add('done');
-                const proximo = (videoAtual + 1) % videosPlaylist.length;
-                tocarVideo(proximo);
-                segundosDecorridos = 0;
+                // Só troca automaticamente se NÃO for vídeo local
+                // (vídeos locais avançam quando terminam pelo evento 'ended')
+                const atual = videosPlaylist[videoAtual];
+                if (!atual || atual.tipo !== 'local') {
+                    avancarVideo();
+                }
             }, tempoTrocaVideo * 1000);
 
+            // Progresso visual (barra inferior)
             intervaloProgresso = setInterval(() => {
                 segundosDecorridos++;
-                const pct = (segundosDecorridos / tempoTrocaVideo) * 100;
+                const pct = Math.min(100, (segundosDecorridos / tempoTrocaVideo) * 100);
                 document.getElementById('progressoVideo').style.width = pct + '%';
             }, 1000);
         }
@@ -1227,7 +1272,7 @@
         carregarPlaylist();
         setInterval(atualizarTudo, 30000);
 
-        console.log('%c🏛️ Painel Corporativo com rolagem automática', 'color:#d4af37; font-size:14px; font-weight:bold;');
+        console.log('%c🎬 Painel misto: YouTube + vídeos locais', 'color:#d4af37; font-size:14px; font-weight:bold;');
     </script>
 </body>
 </html>
