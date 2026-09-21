@@ -32,7 +32,6 @@
             color: var(--text-dark);
             height: 100vh;
             overflow: hidden;
-            /* Fundo corporativo: navy profundo com toques dourados */
             background:
                 radial-gradient(circle at 15% 20%, rgba(37, 99, 235, 0.35) 0%, transparent 50%),
                 radial-gradient(circle at 85% 80%, rgba(212, 175, 55, 0.20) 0%, transparent 50%),
@@ -41,7 +40,7 @@
             background-attachment: fixed;
         }
 
-        /* ===== FAIXA DE AVISOS ROLANDO ===== */
+        /* ===== FAIXA DE AVISOS ===== */
         .ticker-bar {
             height: 44px;
             background: linear-gradient(90deg, #0a1836 0%, #1a3a7a 50%, #0a1836 100%);
@@ -225,7 +224,7 @@
             grid-template-rows: 1fr 1fr;
             gap: 18px;
             padding: 18px;
-            height: calc(100vh - 116px); /* 44 ticker + 72 header */
+            height: calc(100vh - 116px);
         }
 
         .panel {
@@ -246,7 +245,6 @@
             box-shadow: 0 20px 50px rgba(0, 0, 0, 0.4);
         }
 
-        /* Faixas douradas de destaque */
         .panel::before {
             content: '';
             position: absolute;
@@ -332,19 +330,51 @@
             flex: 1;
             min-height: 0;
         }
-        .projetos-coluna { display: flex; flex-direction: column; min-height: 0; }
+        .projetos-coluna {
+            display: flex;
+            flex-direction: column;
+            min-height: 0;
+        }
+
+        /* 🎯 LISTA COM ROLAGEM AUTOMÁTICA */
         .projetos-lista {
             display: flex;
             flex-direction: column;
             gap: 8px;
-            overflow-y: auto;
+            overflow: hidden;
             flex: 1;
             padding-right: 4px;
+            position: relative;
+            mask-image: linear-gradient(
+                to bottom,
+                transparent 0%,
+                #000 6%,
+                #000 94%,
+                transparent 100%
+            );
+            -webkit-mask-image: linear-gradient(
+                to bottom,
+                transparent 0%,
+                #000 6%,
+                #000 94%,
+                transparent 100%
+            );
         }
-        .projetos-lista::-webkit-scrollbar { width: 5px; }
-        .projetos-lista::-webkit-scrollbar-thumb {
-            background: rgba(212, 175, 55, 0.4);
-            border-radius: 4px;
+
+        .projetos-track {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            animation: rolarProjetos 40s linear infinite;
+        }
+
+        .projetos-lista:hover .projetos-track {
+            animation-play-state: paused;
+        }
+
+        @keyframes rolarProjetos {
+            0% { transform: translateY(0); }
+            100% { transform: translateY(-50%); }
         }
 
         .projeto-item {
@@ -731,7 +761,7 @@
 </head>
 <body>
 
-    <!-- ===== FAIXA DE AVISOS ROLANDO ===== -->
+    <!-- ===== FAIXA DE AVISOS ===== -->
     <div class="ticker-bar">
         <div class="ticker-label">
             <svg viewBox="0 0 24 24"><path d="M12 2L1 21h22L12 2zm0 4l7.53 13H4.47L12 6zm-1 5v4h2v-4h-2zm0 5v2h2v-2h-2z"/></svg>
@@ -779,8 +809,11 @@
             </div>
             <div class="p1-conteudo">
                 <div class="projetos-coluna">
+                    <!-- 🎯 Lista com track interno para rolagem automática -->
                     <div class="projetos-lista" id="p1-lista">
-                        <div style="color:#64748b; text-align:center; padding:20px;">Carregando...</div>
+                        <div class="projetos-track" id="p1-track">
+                            <div style="color:#64748b; text-align:center; padding:20px;">Carregando...</div>
+                        </div>
                     </div>
                 </div>
                 <div class="grafico-coluna">
@@ -907,7 +940,6 @@
             return 'status-verde';
         }
 
-        // Ícones SVG por Core Tool
         const ICONES_TOOLS = {
             'APQP': '<svg viewBox="0 0 24 24"><path d="M19 3h-4.18C14.4 1.84 13.3 1 12 1c-1.3 0-2.4.84-2.82 2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-7 0c.55 0 1 .45 1 1s-.45 1-1 1-1-.45-1-1 .45-1 1-1zm0 4c1.66 0 3 1.34 3 3h-2c0-.55-.45-1-1-1s-1 .45-1 1h-2c0-1.66 1.34-3 3-3zm-3 8c0-1.66 1.34-3 3-3h6v2h-6c-.55 0-1 .45-1 1s.45 1 1 1h2v2H9c-1.66 0-3-1.34-3-3z"/></svg>',
             'FMEA': '<svg viewBox="0 0 24 24"><path d="M1 21h22L12 2 1 21zm12-3h-2v-2h2v2zm0-4h-2v-4h2v4z"/></svg>',
@@ -963,7 +995,6 @@
                 item.textContent = texto;
                 container.appendChild(item);
             });
-            // Ajusta tempo da animação conforme quantidade de avisos
             const duracao = Math.max(30, avisos.length * 8);
             container.style.animationDuration = duracao + 's';
         }
@@ -975,8 +1006,11 @@
 
             montarTicker(dados.avisos);
 
-            const lista = document.getElementById('p1-lista');
-            lista.innerHTML = '';
+            const track = document.getElementById('p1-track');
+            track.innerHTML = '';
+
+            // Monta a lista UMA vez
+            const fragment = document.createDocumentFragment();
             dados.projetos.forEach(p => {
                 const item = document.createElement('div');
                 item.className = 'projeto-item';
@@ -993,9 +1027,25 @@
                         <span class="projeto-pct">${p.progresso}%</span>
                     </div>
                 `;
-                lista.appendChild(item);
+                fragment.appendChild(item);
             });
+            track.appendChild(fragment);
 
+            // 🔁 DUPLICA a lista para o loop contínuo
+            const clonado = fragment.cloneNode(true);
+            track.appendChild(clonado);
+
+            // ⏱️ Ajusta a velocidade conforme a quantidade de projetos
+            const qtdProjetos = dados.projetos.length;
+            const duracao = Math.max(20, qtdProjetos * 4);
+            track.style.animationDuration = duracao + 's';
+
+            // Se tiver poucos projetos, não rola
+            if (qtdProjetos <= 2) {
+                track.style.animation = 'none';
+            }
+
+            // ===== Resumo =====
             const r = dados.resumo || {};
             document.getElementById('p1-total').textContent = r.total || dados.projetos.length;
             document.getElementById('p1-concluidos').textContent = r.concluidos || 0;
@@ -1003,6 +1053,7 @@
             document.getElementById('p1-atrasados').textContent = r.atrasados || 0;
             document.getElementById('p1-badge').textContent = dados.projetos.length + ' ativos';
 
+            // ===== Gráfico de rosca =====
             const contagem = { 'Concluído': 0, 'Em execução': 0, 'Revisão': 0, 'Aguardando': 0 };
             dados.projetos.forEach(p => {
                 const s = (p.status || '').toLowerCase();
@@ -1176,7 +1227,7 @@
         carregarPlaylist();
         setInterval(atualizarTudo, 30000);
 
-        console.log('%c🏛️ Painel Corporativo — Azul-marinho + Dourado', 'color:#d4af37; font-size:14px; font-weight:bold;');
+        console.log('%c🏛️ Painel Corporativo com rolagem automática', 'color:#d4af37; font-size:14px; font-weight:bold;');
     </script>
 </body>
 </html>
