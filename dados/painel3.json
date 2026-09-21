@@ -1,36 +1,41 @@
 {
   "titulo": "Treinamentos - Core Tools",
+  "tempoTroca": 60,
   "videos": [
     {
+      "tipo": "local",
+      "arquivo": "./assets/videos/treinamento-apqp.mp4",
+      "titulo": "APQP - Introdução Prática",
+      "descricao": "Treinamento interno da equipe de qualidade",
+      "duracao": "05:20"
+    },
+    {
+      "tipo": "youtube",
       "id": "l9ENuN3iG7Q",
-      "titulo": "Introdução ao APQP",
-      "descricao": "Planejamento Avançado da Qualidade do Produto",
-      "duracao": "8:32"
-    },
-    {
-      "id": "_GVk_hEMj7s",
-      "titulo": "FMEA na Prática",
+      "titulo": "FMEA - Conceitos Básicos",
       "descricao": "Análise de Modos de Falha e Efeitos",
-      "duracao": "12:15"
+      "duracao": "12:00"
     },
     {
-      "id": "Nc8GfFZ2-0Y",
+      "tipo": "local",
+      "arquivo": "./assets/videos/treinamento-fmea.mp4",
+      "titulo": "FMEA - Aplicação na Linha SMT",
+      "descricao": "Exemplo real do nosso processo",
+      "duracao": "08:45"
+    },
+    {
+      "tipo": "youtube",
+      "id": "_GVk_hEMj7s",
       "titulo": "MSA - Estudo R&R",
       "descricao": "Análise do Sistema de Medição",
-      "duracao": "10:47"
+      "duracao": "15:20"
     },
     {
-      "id": "3zQzZ7QmZ-A",
-      "titulo": "SPC - Cartas de Controle",
-      "descricao": "Controle Estatístico do Processo",
-      "duracao": "9:20"
-    },
-    {
-      "id": "W8D2jWpUVCs",
-      "titulo": "PPAP - Submissão de Peças",
-      "descricao": "Processo de Aprovação de Peças de Produção",
-      "duracao": "11:05"
+      "tipo": "local",
+      "arquivo": "./assets/videos/treinamento-msa.mp4",
+      "titulo": "MSA - Boas Práticas Internas",
+      "descricao": "Procedimento padrão da empresa",
+      "duracao": "06:10"
     }
-  ],
-  "tempoTroca": 30
+  ]
 }
